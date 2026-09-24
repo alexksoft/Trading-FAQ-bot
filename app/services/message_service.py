@@ -51,8 +51,9 @@ class MessageService:
         session = get_session(msg.sender)  # reload after possible expiry
 
         if session.mode == "human":
-            reply = await self._handle_mentor_mode(msg, session, faq_config)
-            return await self._translate_reply(reply, original_lang)
+            # In mentor mode: pass original text, AI handles language itself
+            original_msg = msg.model_copy(update={"text": msg.original_text})
+            return await self._handle_mentor_mode(original_msg, session, faq_config)
 
         # --- Step 3: Active analysis or risk flow ---
         if session.mode == "analysis":
