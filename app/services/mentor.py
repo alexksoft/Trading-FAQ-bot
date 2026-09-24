@@ -1,7 +1,6 @@
 # app/services/mentor.py
 # Handles AI tutor mode: entering and resuming.
 # When a user types "mentor", "tutor", "coach" etc., they are connected to the AI tutor.
-# There is no human mentor — all replies come from the AI via Kiro Gateway.
 
 import logging
 from datetime import datetime, timezone, timedelta
