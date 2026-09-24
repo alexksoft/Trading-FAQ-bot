@@ -1,0 +1,28 @@
+# Secrets
+.env
+
+# Logs
+logs/
+
+# Monitor scripts (server-specific)
+monitor_collect.py
+monitor_web_e2micro.py
+
+# Systemd service file (server-specific)
+faqbot.service
+
+# IDE
+.project
+.pydevproject
+.kiro/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+myenv/
+
+# OS
+.DS_Store
+Thumbs.db

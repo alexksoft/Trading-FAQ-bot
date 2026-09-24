@@ -1,0 +1,3526 @@
+# =====================================================================
+# Trading & Money Analytics FAQ Bot - Knowledge Base
+# =====================================================================
+# Educational / analytical only. Not personalized financial advice.
+# Answers are authored in English; non-English input/output is handled
+# by the Kiro-gateway translation layer (see requirements R9).
+#
+# Entry schema:
+#   id:         unique slug
+#   category:   grouping label (informational)
+#   triggers:   list of keywords/short phrases (matched, case-insensitive)
+#   match_type: exact | contains
+#   priority:   higher wins on ties (specific concepts > generic words)
+#   response:   educational answer text
+# =====================================================================
+
+fallback_message: >-
+  I didn't find an answer for that. Try a keyword like "RSI", "MACD",
+  "stop loss", "position size", "DCA", "leverage", or "candlestick".
+  Type "menu" to see topics, "analyze" for setup analysis, "risk" for
+  the position-size calculator, or "mentor" for a human review.
+
+# Mentor mode: these commands pause rule-based FAQ answering and hand the
+# conversation to a human mentor (and, if enabled, an AI-mentor via
+# Kiro-gateway). "resume" returns control to the automatic bot.
+mentor_commands: ["mentor", "coach", "review", "support"]
+resume_command: "resume"
+
+mentor_confirmation: >-
+  Your request has been added to the mentor queue. A human mentor will reply
+  within 24 hours, and automatic replies are paused. Type "resume" anytime to
+  switch back to the automatic assistant.
+
+resume_confirmation: >-
+  You're back with the automatic assistant. Ask a question, or type "menu" to
+  see topics.
+
+entries:
+
+  # ------------------------------------------------------------------
+  # 0. META / NAVIGATION / DISCLAIMER
+  # ------------------------------------------------------------------
+  - id: disclaimer
+    category: meta
+    triggers: ["disclaimer", "is this financial advice", "financial advice", "legal"]
+    match_type: contains
+    priority: 100
+    response: >-
+      This bot is for trading education and analytical decision support only.
+      It explains concepts, calculates risk, and interprets setups using fixed
+      rules. It does not predict the future, give personalized advice, or
+      guarantee profit. Always do your own research and consider consulting a
+      licensed professional.
+
+  - id: menu
+    category: meta
+    triggers: ["menu", "topics", "what can you do", "options", "start"]
+    match_type: contains
+    priority: 95
+    response: >-
+      Topics I can explain: (1) Technical analysis - RSI, MACD, EMA, Bollinger
+      Bands, ATR, VWAP, volume, support/resistance, Fibonacci, divergence,
+      breakouts, trends, candlesticks. (2) Risk management - stop-loss, position
+      sizing, risk/reward, the 1% rule. (3) Strategies - trend following, mean
+      reversion, momentum, breakout, DCA, swing, scalping. (4) Psychology - FOMO,
+      revenge trading, loss aversion. (5) Macro - CPI, interest rates, bull/bear.
+      Type a keyword, "analyze" (setup analysis), "risk" (position size), or
+      "mentor" for a human review.
+
+  - id: greeting
+    category: meta
+    triggers: ["hi", "hello", "hey", "good morning", "good evening"]
+    match_type: exact
+    priority: 40
+    response: >-
+      Hi! I'm a trading & money analytics assistant. Ask me about an indicator
+      (e.g., "What is RSI?"), risk ("How much should I risk per trade?"), or type
+      "menu" for topics. I explain and analyze - I don't give buy/sell advice.
+
+  - id: thanks
+    category: meta
+    triggers: ["thanks", "thank you", "thx", "appreciate it"]
+    match_type: exact
+    priority: 40
+    response: >-
+      You're welcome. Ask another question anytime, or type "menu" to see topics.
+
+  # ------------------------------------------------------------------
+  # 1. TECHNICAL ANALYSIS - RSI
+  # ------------------------------------------------------------------
+  - id: what-is-rsi
+    category: technical-analysis
+    triggers: ["what is rsi", "rsi", "relative strength index"]
+    match_type: contains
+    priority: 80
+    response: >-
+      RSI (Relative Strength Index) is a momentum oscillator that moves between
+      0 and 100, measuring the speed and size of recent price changes.
+      Conventionally, above 70 is considered overbought and below 30 oversold,
+      while the 50 line shows whether buyers or sellers currently control
+      momentum. It is a pressure gauge, not a guaranteed reversal signal.
+
+  - id: rsi-overbought
+    category: technical-analysis
+    triggers: ["rsi overbought", "overbought", "rsi 70", "rsi above 70"]
+    match_type: contains
+    priority: 78
+    response: >-
+      An RSI above 70 is traditionally called "overbought," meaning the recent
+      up-move has been fast and stretched. It does not mean price must fall - in
+      a strong uptrend RSI can stay overbought for a long time. Treat it as a
+      caution flag that needs confirmation, not an automatic sell.
+
+  - id: rsi-oversold
+    category: technical-analysis
+    triggers: ["rsi oversold", "oversold", "rsi 30", "rsi below 30"]
+    match_type: contains
+    priority: 78
+    response: >-
+      An RSI below 30 is traditionally called "oversold," meaning the recent
+      down-move has been fast and stretched. It does not mean price must bounce -
+      in a strong downtrend RSI can stay oversold for a long time. Oversold is a
+      condition to watch, not a stand-alone buy signal.
+
+  - id: rsi-divergence
+    category: technical-analysis
+    triggers: ["rsi divergence", "how do i interpret rsi divergence", "divergence rsi"]
+    match_type: contains
+    priority: 82
+    response: >-
+      RSI divergence is when price and RSI disagree. Bearish divergence: price
+      makes a higher high but RSI makes a lower high, hinting momentum is fading.
+      Bullish divergence: price makes a lower low but RSI makes a higher low,
+      hinting selling pressure is easing. Divergence is an early warning that
+      needs confirmation (e.g., a break of structure), not a precise timing tool.
+
+  - id: rsi-50-line
+    category: technical-analysis
+    triggers: ["rsi 50", "rsi midline", "rsi 50 line"]
+    match_type: contains
+    priority: 76
+    response: >-
+      The RSI 50 level is the momentum midline. Readings holding above 50 suggest
+      buyers are broadly in control; readings holding below 50 suggest sellers
+      are. Many traders read the position relative to 50 before reacting to the
+      70/30 extremes.
+
+  - id: rsi-settings
+    category: technical-analysis
+    triggers: ["rsi period", "rsi 14", "rsi settings", "best rsi setting"]
+    match_type: contains
+    priority: 72
+    response: >-
+      The default RSI lookback is 14 periods. Shorter settings (e.g., 7) react
+      faster but give more false signals; longer settings (e.g., 21) are smoother
+      but slower. There is no single "best" setting - it depends on timeframe and
+      how much noise you can tolerate. Test before relying on any value.
+
+  # ------------------------------------------------------------------
+  # 2. TECHNICAL ANALYSIS - MACD
+  # ------------------------------------------------------------------
+  - id: what-is-macd
+    category: technical-analysis
+    triggers: ["what is macd", "macd", "moving average convergence divergence"]
+    match_type: contains
+    priority: 80
+    response: >-
+      MACD (Moving Average Convergence Divergence) is a momentum and trend tool.
+      The MACD line is the 12-period EMA minus the 26-period EMA; the signal line
+      is a 9-period EMA of the MACD line; the histogram plots the gap between
+      them. Traders watch crossovers, the zero line, and divergence to judge
+      momentum shifts.
+
+  - id: macd-crossover
+    category: technical-analysis
+    triggers: ["macd crossover", "macd cross", "macd signal line"]
+    match_type: contains
+    priority: 78
+    response: >-
+      A MACD crossover happens when the MACD line crosses its signal line. A
+      cross above the signal line is read as strengthening bullish momentum; a
+      cross below as strengthening bearish momentum. Crossovers lag price, so
+      they confirm moves rather than predict them, and work best with trend
+      context.
+
+  - id: macd-histogram
+    category: technical-analysis
+    triggers: ["macd histogram", "histogram"]
+    match_type: contains
+    priority: 76
+    response: >-
+      The MACD histogram shows the distance between the MACD line and its signal
+      line. Growing bars mean momentum is accelerating in the current direction;
+      shrinking bars warn that momentum is decelerating, which can precede a
+      crossover. It measures acceleration, not direction by itself.
+
+  - id: macd-zero-line
+    category: technical-analysis
+    triggers: ["macd zero line", "macd above zero", "macd below zero"]
+    match_type: contains
+    priority: 74
+    response: >-
+      The MACD zero line marks where the two EMAs are equal. MACD above zero
+      means the shorter EMA is above the longer one (broadly bullish); below zero
+      is broadly bearish. Zero-line crosses are slower but higher-conviction
+      signals than signal-line crosses.
+
+  - id: macd-divergence
+    category: technical-analysis
+    triggers: ["macd divergence"]
+    match_type: contains
+    priority: 78
+    response: >-
+      MACD divergence is when price and the MACD disagree - e.g., price makes a
+      higher high while MACD makes a lower high (bearish), or price makes a lower
+      low while MACD makes a higher low (bullish). Like all divergence, it flags
+      weakening momentum and needs confirmation before acting.
+
+  # ------------------------------------------------------------------
+  # 3. TECHNICAL ANALYSIS - MOVING AVERAGES
+  # ------------------------------------------------------------------
+  - id: what-is-moving-average
+    category: technical-analysis
+    triggers: ["what is a moving average", "moving average", "what is ma"]
+    match_type: contains
+    priority: 74
+    response: >-
+      A moving average smooths price by averaging it over a set number of
+      periods, making the trend easier to see. Rising MA suggests an uptrend,
+      falling MA a downtrend. It is a lagging indicator - it reacts after price
+      moves - so it confirms trend rather than predicting turns.
+
+  - id: what-is-sma
+    category: technical-analysis
+    triggers: ["what is sma", "sma", "simple moving average"]
+    match_type: contains
+    priority: 74
+    response: >-
+      SMA (Simple Moving Average) averages closing prices over N periods, giving
+      each period equal weight. It is smooth and stable but slower to respond to
+      recent price than an EMA. Common lengths are 20, 50, 100, and 200.
+
+  - id: what-is-ema
+    category: technical-analysis
+    triggers: ["what is ema", "ema", "exponential moving average"]
+    match_type: contains
+    priority: 74
+    response: >-
+      EMA (Exponential Moving Average) is a moving average that weights recent
+      prices more heavily, so it reacts faster than an SMA of the same length.
+      Traders use it to gauge trend direction and dynamic support/resistance.
+      Faster reaction also means more sensitivity to noise.
+
+  - id: ema-20-vs-200
+    category: technical-analysis
+    triggers: ["ema 20 vs ema 200", "ema20 vs ema200", "20 ema vs 200 ema", "ema 200"]
+    match_type: contains
+    priority: 78
+    response: >-
+      The EMA 20 tracks short-term momentum; the EMA 200 tracks the long-term
+      trend. Price above the 200 EMA is generally seen as a bullish long-term
+      backdrop, below it as bearish. When a short EMA is above a long EMA and
+      both rise, trend and momentum align; when they conflict, signals are weaker
+      and need more confirmation.
+
+  - id: golden-cross
+    category: technical-analysis
+    triggers: ["golden cross", "what is a golden cross"]
+    match_type: contains
+    priority: 76
+    response: >-
+      A golden cross is when a shorter moving average (often the 50) crosses
+      above a longer one (often the 200), read as a bullish trend signal. It is a
+      lagging, confirmation-style signal - it describes a shift that has already
+      begun rather than forecasting one.
+
+  - id: death-cross
+    category: technical-analysis
+    triggers: ["death cross", "what is a death cross"]
+    match_type: contains
+    priority: 76
+    response: >-
+      A death cross is when a shorter moving average (often the 50) crosses below
+      a longer one (often the 200), read as a bearish trend signal. Like the
+      golden cross it lags price and confirms a change in trend rather than
+      predicting it.
+
+  - id: ma-crossover
+    category: technical-analysis
+    triggers: ["moving average crossover", "ma crossover", "ema crossover"]
+    match_type: contains
+    priority: 72
+    response: >-
+      A moving-average crossover strategy buys/sells when a fast MA crosses a
+      slow MA. It captures trends well but whipsaws in sideways markets, giving
+      many false signals. Traders often add a trend or volatility filter to
+      reduce those whipsaws.
+
+  # ------------------------------------------------------------------
+  # 4. TECHNICAL ANALYSIS - BOLLINGER, ATR, VWAP, STOCH
+  # ------------------------------------------------------------------
+  - id: bollinger-bands
+    category: technical-analysis
+    triggers: ["bollinger bands", "what are bollinger bands", "bollinger"]
+    match_type: contains
+    priority: 76
+    response: >-
+      Bollinger Bands plot a moving average (usually 20) with an upper and lower
+      band set a number of standard deviations away (usually 2). The bands widen
+      when volatility rises and narrow when it falls. Price tagging a band shows
+      it is stretched relative to recent range - not an automatic reversal.
+
+  - id: bollinger-squeeze
+    category: technical-analysis
+    triggers: ["bollinger squeeze", "band squeeze", "squeeze"]
+    match_type: contains
+    priority: 74
+    response: >-
+      A Bollinger "squeeze" is when the bands narrow sharply, signaling unusually
+      low volatility that often precedes a larger move. The squeeze tells you a
+      big move may be coming but not its direction - traders wait for a breakout
+      with confirmation.
+
+  - id: what-is-atr
+    category: technical-analysis
+    triggers: ["what is atr", "atr", "average true range"]
+    match_type: contains
+    priority: 76
+    response: >-
+      ATR (Average True Range) measures volatility - the average size of price
+      movement over a period - not direction. Higher ATR means bigger swings.
+      Traders use it to size stops and targets to current volatility, e.g.,
+      placing a stop a multiple of ATR away from entry.
+
+  - id: what-is-vwap
+    category: technical-analysis
+    triggers: ["what is vwap", "vwap", "volume weighted average price"]
+    match_type: contains
+    priority: 76
+    response: >-
+      VWAP (Volume-Weighted Average Price) is the average price weighted by
+      volume over a session. Institutions use it as a fair-value benchmark.
+      Price above VWAP is often read as intraday bullish, below as bearish, and
+      VWAP itself can act as intraday support/resistance.
+
+  - id: stochastic
+    category: technical-analysis
+    triggers: ["stochastic", "stochastic oscillator", "what is stochastic"]
+    match_type: contains
+    priority: 72
+    response: >-
+      The Stochastic oscillator compares the close to the recent high-low range,
+      moving between 0 and 100. Above 80 is considered overbought and below 20
+      oversold. Like RSI it works best in ranges and can stay pinned in strong
+      trends, so it needs confirmation.
+
+  - id: obv
+    category: technical-analysis
+    triggers: ["obv", "on balance volume", "on-balance volume"]
+    match_type: contains
+    priority: 70
+    response: >-
+      OBV (On-Balance Volume) is a running total that adds volume on up days and
+      subtracts it on down days. A rising OBV suggests buying pressure is
+      accumulating, a falling OBV selling pressure. Divergence between OBV and
+      price can hint that a move lacks volume support.
+
+  - id: adx
+    category: technical-analysis
+    triggers: ["adx", "average directional index", "directional index"]
+    match_type: contains
+    priority: 70
+    response: >-
+      ADX (Average Directional Index) measures trend strength, not direction, on
+      a 0-100 scale. Readings above ~25 suggest a trending market where
+      trend-following works better; low readings suggest a range where mean
+      reversion may fit better.
+
+  - id: ichimoku
+    category: technical-analysis
+    triggers: ["ichimoku", "ichimoku cloud", "kumo"]
+    match_type: contains
+    priority: 68
+    response: >-
+      Ichimoku Cloud is a system showing trend, momentum, and support/resistance
+      at once. Price above the cloud is broadly bullish, below it bearish, and
+      inside it neutral/uncertain. It packs several signals together, so beginners
+      often start with just price-vs-cloud.
+
+  - id: parabolic-sar
+    category: technical-analysis
+    triggers: ["parabolic sar", "psar", "sar"]
+    match_type: contains
+    priority: 66
+    response: >-
+      Parabolic SAR plots dots that trail price and flip sides when the trend
+      changes, offering trailing-stop and trend-direction cues. It performs well
+      in trends but flips repeatedly in choppy, sideways markets.
+
+  - id: cci
+    category: technical-analysis
+    triggers: ["cci", "commodity channel index"]
+    match_type: contains
+    priority: 64
+    response: >-
+      CCI (Commodity Channel Index) measures how far price is from its average.
+      Readings above +100 suggest a strong up-move (possibly overbought), below
+      -100 a strong down-move (possibly oversold). It is used for momentum and
+      divergence across many markets, not just commodities.
+
+  # ------------------------------------------------------------------
+  # 5. CHART STRUCTURE - SUPPORT / RESISTANCE / TRENDS
+  # ------------------------------------------------------------------
+  - id: support-resistance
+    category: chart-structure
+    triggers: ["support and resistance", "support/resistance", "what is support", "what is resistance", "support resistance"]
+    match_type: contains
+    priority: 80
+    response: >-
+      Support is a price area where buying has tended to stop declines;
+      resistance is where selling has tended to stop advances. They are zones,
+      not exact lines. The more times a level is tested and the more volume
+      around it, the more significant it is - until it breaks, after which roles
+      can flip (support becomes resistance and vice versa).
+
+  - id: support-becomes-resistance
+    category: chart-structure
+    triggers: ["support becomes resistance", "role reversal", "flip zone"]
+    match_type: contains
+    priority: 72
+    response: >-
+      When a support level breaks, it often becomes resistance on a retest, and a
+      broken resistance often becomes support. This "role reversal" happens
+      because traders who were trapped or missed the move act around that level
+      again. It is a common way to look for retest entries with confirmation.
+
+  - id: what-is-trend
+    category: chart-structure
+    triggers: ["what is a trend", "trend", "trend analysis"]
+    match_type: contains
+    priority: 74
+    response: >-
+      A trend is the general direction of price. An uptrend makes higher highs
+      and higher lows; a downtrend makes lower highs and lower lows; a range moves
+      sideways. Identifying the trend first helps you pick strategies that fit -
+      trend-following in trends, mean reversion in ranges.
+
+  - id: higher-highs-lows
+    category: chart-structure
+    triggers: ["higher highs", "higher lows", "lower highs", "lower lows", "market structure"]
+    match_type: contains
+    priority: 72
+    response: >-
+      Market structure is read through swing points. A sequence of higher highs
+      and higher lows defines an uptrend; lower highs and lower lows define a
+      downtrend. A "break of structure" - like an uptrend suddenly making a lower
+      low - is an early sign the trend may be changing.
+
+  - id: trendline
+    category: chart-structure
+    triggers: ["trendline", "trend line", "how to draw trendline"]
+    match_type: contains
+    priority: 70
+    response: >-
+      A trendline connects successive swing lows (in an uptrend) or swing highs
+      (in a downtrend) to visualize direction and dynamic support/resistance.
+      More touches make it more meaningful. Trendlines are subjective, so use them
+      as a guide alongside horizontal levels and confirmation.
+
+  - id: consolidation
+    category: chart-structure
+    triggers: ["consolidation", "sideways market", "ranging market", "range bound"]
+    match_type: contains
+    priority: 68
+    response: >-
+      Consolidation is when price moves sideways in a range, with buyers and
+      sellers roughly balanced. It often follows a strong move (a pause) and can
+      precede a breakout. In ranges, buying support and selling resistance suits
+      better than chasing breakouts.
+
+  - id: pullback
+    category: chart-structure
+    triggers: ["pullback", "retracement", "what is a pullback"]
+    match_type: contains
+    priority: 68
+    response: >-
+      A pullback (or retracement) is a temporary move against the prevailing
+      trend before it potentially resumes. Traders often look to enter on
+      pullbacks to support in an uptrend. The challenge is distinguishing a
+      healthy pullback from the start of a full reversal, which needs confirmation.
+
+  # ------------------------------------------------------------------
+  # 6. FIBONACCI
+  # ------------------------------------------------------------------
+  - id: fibonacci
+    category: chart-structure
+    triggers: ["fibonacci", "fib", "fib retracement", "fibonacci retracement"]
+    match_type: contains
+    priority: 74
+    response: >-
+      Fibonacci retracement marks potential pullback levels - commonly 23.6%,
+      38.2%, 50%, 61.8%, and 78.6% - drawn between a swing low and swing high.
+      Traders watch these areas for possible support/resistance during a
+      retracement. They are reference zones, not guarantees, and work best
+      combined with structure and confirmation.
+
+  - id: fib-golden-ratio
+    category: chart-structure
+    triggers: ["golden ratio", "618", "61.8", "0.618"]
+    match_type: contains
+    priority: 66
+    response: >-
+      The 61.8% level (the "golden ratio") is a widely watched Fibonacci
+      retracement. Deep pullbacks to it that hold can suggest the trend is intact;
+      a decisive break beyond it can suggest the move is weakening. Its popularity
+      partly makes it self-fulfilling, but it is still just a reference.
+
+  - id: fib-extension
+    category: chart-structure
+    triggers: ["fibonacci extension", "fib extension", "fib targets"]
+    match_type: contains
+    priority: 64
+    response: >-
+      Fibonacci extensions (e.g., 127.2%, 161.8%, 261.8%) project potential
+      profit-target zones beyond the prior swing. Traders use them to plan exits
+      rather than entries. As with all Fib tools, treat them as areas of interest
+      needing confirmation.
+
+  # ------------------------------------------------------------------
+  # 7. VOLUME
+  # ------------------------------------------------------------------
+  - id: what-is-volume
+    category: volume
+    triggers: ["what is volume", "trading volume", "volume"]
+    match_type: contains
+    priority: 74
+    response: >-
+      Volume is the number of units traded in a period. It shows participation
+      and conviction behind a move. Rising volume on a move suggests strong
+      interest and better confirmation; low volume suggests a weak move that may
+      not hold. Volume is context, best read alongside price.
+
+  - id: high-volume-meaning
+    category: volume
+    triggers: ["high trading volume", "what does high volume mean", "high volume"]
+    match_type: contains
+    priority: 76
+    response: >-
+      High volume means strong participation. On a breakout it confirms conviction
+      and improves the odds the move holds; at extremes after a long trend it can
+      signal a climax where the move exhausts. High volume itself is neutral - its
+      meaning depends on price context and where it occurs.
+
+  - id: low-volume-meaning
+    category: volume
+    triggers: ["low volume", "what does low volume mean", "declining volume"]
+    match_type: contains
+    priority: 74
+    response: >-
+      Low or declining volume means weak participation. A breakout on low volume
+      is more likely to fail (a possible fakeout), and a trend on fading volume
+      may be running out of fuel. Low volume is a caution flag that reduces
+      confidence in the current move.
+
+  - id: volume-confirmation
+    category: volume
+    triggers: ["volume confirmation", "confirm with volume"]
+    match_type: contains
+    priority: 70
+    response: >-
+      Volume confirmation means checking that a price move is backed by
+      participation. Breakouts, trend continuations, and reversals are more
+      reliable when accompanied by an increase in volume, and more suspect when
+      volume is thin.
+
+  - id: volume-profile
+    category: volume
+    triggers: ["volume profile", "point of control", "poc"]
+    match_type: contains
+    priority: 66
+    response: >-
+      Volume profile shows how much volume traded at each price rather than over
+      time. High-volume nodes act like magnets and support/resistance; the Point
+      of Control (POC) is the price with the most volume. Low-volume areas can be
+      crossed quickly. It helps locate meaningful price levels.
+
+  # ------------------------------------------------------------------
+  # 8. CANDLESTICKS
+  # ------------------------------------------------------------------
+  - id: read-candlestick
+    category: candlesticks
+    triggers: ["how do i read a candlestick", "read a candle", "candlestick", "candle"]
+    match_type: contains
+    priority: 76
+    response: >-
+      A candlestick shows four prices for a period: open, high, low, close. The
+      body spans open-to-close (colored up if close > open, down if close < open),
+      and the thin wicks show the high and low extremes. Long bodies show
+      conviction; long wicks show rejection of a price level.
+
+  - id: doji
+    category: candlesticks
+    triggers: ["doji", "what is a doji"]
+    match_type: contains
+    priority: 72
+    response: >-
+      A doji is a candle with almost no body - the open and close are nearly
+      equal - showing indecision between buyers and sellers. After a strong trend
+      it can hint at a pause or possible reversal, but only with confirmation from
+      the next candles.
+
+  - id: hammer
+    category: candlesticks
+    triggers: ["hammer", "hammer candle", "hanging man"]
+    match_type: contains
+    priority: 70
+    response: >-
+      A hammer has a small body near the top and a long lower wick, showing that
+      sellers pushed price down but buyers pushed it back up - a potential
+      bullish reversal after a downtrend. The same shape after an uptrend is
+      called a hanging man (potential bearish signal). Confirm with the next
+      candle.
+
+  - id: engulfing
+    category: candlesticks
+    triggers: ["engulfing", "bullish engulfing", "bearish engulfing"]
+    match_type: contains
+    priority: 70
+    response: >-
+      An engulfing pattern is a two-candle signal where the second candle's body
+      fully covers the first. A bullish engulfing after a decline hints at a
+      shift to buyers; a bearish engulfing after a rally hints at a shift to
+      sellers. Stronger with volume and at a key level.
+
+  - id: pin-bar
+    category: candlesticks
+    triggers: ["pin bar", "pinbar", "rejection candle", "long wick"]
+    match_type: contains
+    priority: 68
+    response: >-
+      A pin bar has a small body and one long wick, marking a sharp rejection of
+      a price area. A long lower wick at support hints buyers defended it; a long
+      upper wick at resistance hints sellers defended it. It is a rejection signal
+      that works best at meaningful levels.
+
+  - id: marubozu
+    category: candlesticks
+    triggers: ["marubozu", "full body candle"]
+    match_type: contains
+    priority: 62
+    response: >-
+      A marubozu is a candle with a large body and little to no wick, meaning one
+      side dominated the entire period. It signals strong conviction in that
+      direction, though a single candle should still be read within the larger
+      trend and structure.
+
+  - id: morning-evening-star
+    category: candlesticks
+    triggers: ["morning star", "evening star"]
+    match_type: contains
+    priority: 62
+    response: >-
+      Morning star (bullish) and evening star (bearish) are three-candle reversal
+      patterns: a strong trend candle, a small indecision candle, then a strong
+      candle in the opposite direction. They suggest a possible turn, confirmed by
+      follow-through and ideally volume.
+
+  # ------------------------------------------------------------------
+  # 9. CHART PATTERNS
+  # ------------------------------------------------------------------
+  - id: head-and-shoulders
+    category: patterns
+    triggers: ["head and shoulders", "head shoulders", "inverse head and shoulders"]
+    match_type: contains
+    priority: 68
+    response: >-
+      Head and shoulders is a reversal pattern: a peak (shoulder), higher peak
+      (head), lower peak (shoulder), with a "neckline" support. A break below the
+      neckline suggests a top and possible downside. The inverse version signals a
+      possible bottom. Confirmation is the neckline break, ideally on volume.
+
+  - id: double-top-bottom
+    category: patterns
+    triggers: ["double top", "double bottom"]
+    match_type: contains
+    priority: 68
+    response: >-
+      A double top is two similar highs that fail to break higher, hinting at a
+      reversal down once the low between them breaks. A double bottom is the
+      mirror image, hinting at a reversal up. Both are confirmed by the break of
+      the middle level, not by the two touches alone.
+
+  - id: triangle-pattern
+    category: patterns
+    triggers: ["triangle pattern", "ascending triangle", "descending triangle", "symmetrical triangle"]
+    match_type: contains
+    priority: 66
+    response: >-
+      Triangles form as price coils into a narrowing range. Ascending triangles
+      (flat top, rising lows) often break up; descending (flat bottom, falling
+      highs) often break down; symmetrical can break either way. Trade the
+      confirmed breakout, since price can fake a break before resolving.
+
+  - id: flag-pennant
+    category: patterns
+    triggers: ["flag pattern", "pennant", "bull flag", "bear flag"]
+    match_type: contains
+    priority: 64
+    response: >-
+      Flags and pennants are short consolidations after a sharp move (the
+      "pole"), usually continuation patterns. A bull flag drifts down slightly
+      before continuing up; a bear flag drifts up before continuing down. Traders
+      watch for a breakout in the direction of the original move.
+
+  - id: wedge-pattern
+    category: patterns
+    triggers: ["wedge", "rising wedge", "falling wedge"]
+    match_type: contains
+    priority: 62
+    response: >-
+      A wedge is a narrowing pattern that slopes. A rising wedge often resolves
+      down and a falling wedge often resolves up, making them potential reversal
+      patterns. As always, the confirmed break of the wedge boundary is the signal,
+      not the shape alone.
+
+  - id: cup-and-handle
+    category: patterns
+    triggers: ["cup and handle", "cup handle"]
+    match_type: contains
+    priority: 60
+    response: >-
+      A cup and handle is a bullish continuation pattern: a rounded "cup" base
+      followed by a small pullback "handle," then a breakout above the rim.
+      Traders look for the breakout with volume as confirmation.
+
+  # ------------------------------------------------------------------
+  # 10. BREAKOUTS, FAKEOUTS, LIQUIDITY
+  # ------------------------------------------------------------------
+  - id: what-is-breakout
+    category: breakouts
+    triggers: ["what is a breakout", "breakout"]
+    match_type: contains
+    priority: 76
+    response: >-
+      A breakout is when price moves decisively beyond a key level - support,
+      resistance, or a pattern boundary - often starting a new move. Strong
+      breakouts usually come with rising volume. Without volume or follow-through,
+      a breakout is more likely to fail.
+
+  - id: breakout-vs-fakeout
+    category: breakouts
+    triggers: ["breakout from a fakeout", "fakeout", "false breakout", "distinguish breakout"]
+    match_type: contains
+    priority: 82
+    response: >-
+      A fakeout (false breakout) is when price pokes beyond a level then snaps
+      back inside. Clues that separate a real breakout from a fakeout: real breaks
+      usually have higher volume, a strong close beyond the level (not just a
+      wick), and a successful retest that holds. Waiting for a close and retest
+      reduces getting trapped, at the cost of a slightly later entry.
+
+  - id: retest
+    category: breakouts
+    triggers: ["retest", "breakout retest", "backtest level"]
+    match_type: contains
+    priority: 70
+    response: >-
+      A retest is when price returns to a broken level to "test" it as new
+      support/resistance before continuing. A level that breaks and then holds on
+      the retest gives added confirmation, which many traders prefer over entering
+      on the initial break.
+
+  - id: liquidity-sweep
+    category: breakouts
+    triggers: ["liquidity sweep", "what is a liquidity sweep", "stop hunt", "liquidity grab"]
+    match_type: contains
+    priority: 74
+    response: >-
+      A liquidity sweep (or stop hunt) is a quick push beyond an obvious high or
+      low to trigger clustered stop orders, then a sharp reversal. It "collects"
+      liquidity sitting at those levels. Traders watch for a sweep followed by a
+      strong reversal back inside range as a potential entry signal - with
+      confirmation, since it can also be a genuine breakout.
+
+  - id: liquidity
+    category: breakouts
+    triggers: ["what is liquidity", "liquidity", "liquid market"]
+    match_type: contains
+    priority: 68
+    response: >-
+      Liquidity is how easily an asset can be bought or sold without moving its
+      price much. High liquidity means tight spreads and easy fills; low
+      liquidity means wider spreads, slippage, and sharper moves. Thin liquidity
+      makes fakeouts and volatile wicks more common.
+
+  - id: breaker-block
+    category: breakouts
+    triggers: ["order block", "breaker block", "supply and demand zone"]
+    match_type: contains
+    priority: 60
+    response: >-
+      Order blocks and supply/demand zones are areas where large orders
+      previously drove a strong move; traders expect reactions when price
+      revisits them. They are a way to frame support/resistance around where
+      significant buying or selling occurred. Treat them as zones needing
+      confirmation.
+
+  # ------------------------------------------------------------------
+  # 11. RISK MANAGEMENT
+  # ------------------------------------------------------------------
+  - id: what-is-stop-loss
+    category: risk-management
+    triggers: ["what is a stop loss", "stop loss", "stop-loss", "sl"]
+    match_type: contains
+    priority: 82
+    response: >-
+      A stop-loss is a preset price where you exit a losing trade to cap the loss.
+      It defines your risk before you enter and removes the emotional "hope it
+      comes back" decision. Place it at a level that invalidates your trade idea
+      (e.g., beyond support/structure), not at a random distance.
+
+  - id: what-is-take-profit
+    category: risk-management
+    triggers: ["what is take profit", "take profit", "tp", "target price"]
+    match_type: contains
+    priority: 76
+    response: >-
+      A take-profit is a preset price where you close a winning trade to lock in
+      gains. Setting it in advance (often at a structure level or a risk/reward
+      multiple) keeps exits disciplined. Some traders scale out - taking partial
+      profit at several targets.
+
+  - id: risk-reward
+    category: risk-management
+    triggers: ["how do i calculate risk reward", "risk reward", "risk/reward", "risk reward ratio", "r:r", "rr"]
+    match_type: contains
+    priority: 82
+    response: >-
+      Risk/reward compares potential loss to potential gain. Risk = entry minus
+      stop; reward = target minus entry. Ratio = reward / risk. Example: entry
+      100, stop 95, target 115 -> risk 5, reward 15, R:R = 3:1. A higher R:R lets
+      you be profitable even with a lower win rate, but the target must be
+      realistic.
+
+  - id: risk-per-trade
+    category: risk-management
+    triggers: ["how much should i risk per trade", "risk per trade", "how much to risk"]
+    match_type: contains
+    priority: 84
+    response: >-
+      A common guideline is to risk only a small, fixed fraction of your account
+      per trade - often 1% (conservative) up to about 2%. Risking 1% means a
+      losing streak barely dents the account and you survive to keep trading. The
+      right number depends on your strategy, edge, and tolerance - smaller is
+      safer.
+
+  - id: one-percent-rule
+    category: risk-management
+    triggers: ["1% rule", "one percent rule", "1 percent rule"]
+    match_type: contains
+    priority: 80
+    response: >-
+      The 1% rule says never risk more than 1% of your account on a single trade.
+      On a $50,000 account that caps the loss at $500 per trade - but you can
+      still take a large position if your stop is tight, because the rule limits
+      the loss, not the position's notional size. It is about surviving losing
+      streaks.
+
+  - id: what-is-position-sizing
+    category: risk-management
+    triggers: ["what is position sizing", "position sizing", "position size"]
+    match_type: contains
+    priority: 84
+    response: >-
+      Position sizing decides how many units to trade so a stop-out costs only
+      your intended risk. Formula: dollar risk = account x risk%; per-unit risk =
+      |entry - stop|; position size = dollar risk / per-unit risk. It is arguably
+      the most important risk decision - size from your stop distance, never from
+      how much margin is available. Type "risk" and I'll calculate it for you.
+
+  - id: position-size-example
+    category: risk-management
+    triggers: ["position size example", "calculate position size", "how many shares"]
+    match_type: contains
+    priority: 78
+    response: >-
+      Example: account $5,000, risk 1% -> dollar risk $50. Entry $100, stop $95 ->
+      per-unit risk $5. Position size = $50 / $5 = 10 shares. Max loss if stopped
+      out = 10 x $5 = $50, exactly 1% of the account. Type "risk" to run this with
+      your own numbers.
+
+  - id: max-drawdown
+    category: risk-management
+    triggers: ["max drawdown", "drawdown", "what is drawdown"]
+    match_type: contains
+    priority: 72
+    response: >-
+      Drawdown is the drop from a peak in your account to a trough, usually shown
+      as a percentage. It matters because losses compound: a 50% drawdown needs a
+      100% gain to recover. Controlling per-trade risk keeps drawdowns survivable.
+
+  - id: risk-of-ruin
+    category: risk-management
+    triggers: ["risk of ruin", "blowing account", "blow up account"]
+    match_type: contains
+    priority: 70
+    response: >-
+      Risk of ruin is the probability of losing enough capital that you can no
+      longer trade effectively. It rises fast with big per-trade risk, over-
+      leverage, and long losing streaks. Small, consistent risk per trade is the
+      main defense.
+
+  - id: trailing-stop
+    category: risk-management
+    triggers: ["trailing stop", "trailing stop loss"]
+    match_type: contains
+    priority: 70
+    response: >-
+      A trailing stop moves in your favor as price advances but never backward,
+      locking in gains while giving the trade room to run. It can be set by a
+      fixed distance, a percentage, or a multiple of ATR. The trade-off: too tight
+      and you get shaken out; too loose and you give back profit.
+
+  - id: break-even-stop
+    category: risk-management
+    triggers: ["break even stop", "move stop to break even", "risk free trade"]
+    match_type: contains
+    priority: 66
+    response: >-
+      Moving your stop to break-even (your entry price) after a trade moves in
+      your favor removes the initial risk, making it a "risk-free" trade. The
+      downside is that normal pullbacks can stop you out before the move
+      continues, so timing the move matters.
+
+  - id: diversification
+    category: risk-management
+    triggers: ["diversification", "diversify", "spread risk"]
+    match_type: contains
+    priority: 66
+    response: >-
+      Diversification spreads capital across uncorrelated assets so one bad
+      position does not sink the account. Over-diversifying can dilute returns and
+      be hard to manage; too little concentrates risk. Correlated assets (e.g.,
+      many tech stocks) offer less real diversification than they appear to.
+
+  - id: correlation
+    category: risk-management
+    triggers: ["correlation", "correlated assets", "uncorrelated"]
+    match_type: contains
+    priority: 62
+    response: >-
+      Correlation measures how assets move together. Highly correlated positions
+      effectively multiply the same bet - if they all drop together, your risk is
+      larger than it looks. Checking correlation helps avoid stacking hidden risk
+      across "different" trades.
+
+  - id: hedging
+    category: risk-management
+    triggers: ["hedging", "hedge", "how to hedge"]
+    match_type: contains
+    priority: 62
+    response: >-
+      Hedging offsets risk in one position with another that tends to move the
+      opposite way (e.g., an option or an inversely correlated asset). It reduces
+      downside but usually caps upside and has a cost. It is a risk-management
+      tool, not a profit engine.
+
+  - id: risk-management-importance
+    category: risk-management
+    triggers: ["why is risk management important", "importance of risk management"]
+    match_type: contains
+    priority: 74
+    response: >-
+      Risk management keeps you in the game. You cannot control whether any single
+      trade wins, but you can control how much you lose when wrong. Traders who
+      survive long term usually manage risk well rather than predict perfectly -
+      protecting capital is the priority.
+
+  # ------------------------------------------------------------------
+  # 12. LEVERAGE, MARGIN, LIQUIDATION
+  # ------------------------------------------------------------------
+  - id: what-is-leverage
+    category: leverage
+    triggers: ["what is leverage", "leverage"]
+    match_type: contains
+    priority: 82
+    response: >-
+      Leverage lets you control a larger position than your capital by borrowing
+      from the broker (e.g., 10x turns $1,000 into $10,000 of exposure). It
+      magnifies both gains and losses on the same price move. More leverage means
+      a smaller adverse move can wipe out your margin.
+
+  - id: leverage-danger
+    category: leverage
+    triggers: ["why is leverage dangerous", "leverage dangerous", "risk of leverage"]
+    match_type: contains
+    priority: 82
+    response: >-
+      Leverage is dangerous because it amplifies losses and shrinks the price move
+      needed to lose your capital. At 10x, a 10% move against you can wipe the
+      position (liquidation). It also magnifies emotional pressure, leading to
+      panic decisions. Many beginners lose accounts through over-leverage, not bad
+      analysis.
+
+  - id: what-is-margin
+    category: leverage
+    triggers: ["what is margin", "margin", "margin trading"]
+    match_type: contains
+    priority: 74
+    response: >-
+      Margin is the collateral you post to open a leveraged position. Initial
+      margin opens the trade; maintenance margin must be kept or you get a margin
+      call / liquidation. Trading on margin means borrowed money, so losses can
+      exceed your initial deposit in some markets.
+
+  - id: margin-call
+    category: leverage
+    triggers: ["margin call", "what is a margin call"]
+    match_type: contains
+    priority: 72
+    response: >-
+      A margin call is a demand to add funds when your position's losses push your
+      margin below the required level. If you don't, the broker may close
+      positions automatically. It is a warning sign that the position is too large
+      or leverage too high for the account.
+
+  - id: liquidation
+    category: leverage
+    triggers: ["liquidation", "liquidated", "what is liquidation", "getting liquidated"]
+    match_type: contains
+    priority: 74
+    response: >-
+      Liquidation is when a broker/exchange force-closes a leveraged position
+      because the loss has consumed your margin. The higher the leverage, the
+      closer the liquidation price is to entry. Using lower leverage and a proper
+      stop keeps you far from liquidation.
+
+  - id: long-vs-short
+    category: leverage
+    triggers: ["long vs short", "going long", "going short", "short selling", "what is shorting"]
+    match_type: contains
+    priority: 72
+    response: >-
+      Going long means buying to profit if price rises. Going short means selling
+      borrowed units to profit if price falls, buying back lower to return them.
+      Shorting has theoretically unlimited loss (price can keep rising), so risk
+      control matters even more.
+
+  - id: funding-rate
+    category: leverage
+    triggers: ["funding rate", "perpetual funding", "funding"]
+    match_type: contains
+    priority: 60
+    response: >-
+      In perpetual futures, the funding rate is a periodic payment between longs
+      and shorts that keeps the contract price near spot. Positive funding means
+      longs pay shorts (crowded longs); negative means shorts pay longs. Extreme
+      funding can hint at crowded positioning.
+
+  # ------------------------------------------------------------------
+  # 13. DCA & INVESTING BASICS
+  # ------------------------------------------------------------------
+  - id: what-is-dca
+    category: strategy
+    triggers: ["what is dca", "dca", "dollar cost averaging", "dollar-cost averaging"]
+    match_type: contains
+    priority: 82
+    response: >-
+      DCA (Dollar-Cost Averaging) means investing a fixed amount at regular
+      intervals regardless of price. You buy more units when prices are low and
+      fewer when high, smoothing your average entry and removing the pressure to
+      time the market. It suits long-term investors more than short-term traders.
+
+  - id: dca-pros-cons
+    category: strategy
+    triggers: ["dca pros and cons", "is dca good", "benefits of dca"]
+    match_type: contains
+    priority: 70
+    response: >-
+      DCA reduces timing risk, enforces discipline, and lowers the emotional pull
+      of volatility. The trade-off: in a steadily rising market, investing a lump
+      sum earlier can outperform, and DCA doesn't protect a fundamentally poor
+      asset. It manages timing risk, not asset-quality risk.
+
+  - id: lump-sum-vs-dca
+    category: strategy
+    triggers: ["lump sum vs dca", "lump sum investing"]
+    match_type: contains
+    priority: 64
+    response: >-
+      Lump-sum invests everything at once; DCA spreads it over time. Historically,
+      lump sum often wins in rising markets because money is invested sooner,
+      while DCA reduces regret and risk if you buy right before a drop. The choice
+      depends on your risk tolerance and cash flow.
+
+  - id: hodl
+    category: strategy
+    triggers: ["hodl", "hold long term", "buy and hold"]
+    match_type: contains
+    priority: 62
+    response: >-
+      HODL / buy-and-hold means holding an asset through volatility for the long
+      term rather than trading in and out. It avoids overtrading and timing
+      mistakes but requires conviction in the asset and the ability to sit through
+      large drawdowns without panic selling.
+
+  # ------------------------------------------------------------------
+  # 14. TRADING STRATEGIES
+  # ------------------------------------------------------------------
+  - id: trend-following
+    category: strategy
+    triggers: ["trend following", "trend follow", "what is trend following"]
+    match_type: contains
+    priority: 74
+    response: >-
+      Trend following aims to enter in the direction of an established trend and
+      ride it. It works well in strong, sustained trends and fails in choppy,
+      ranging markets (many small whipsaw losses). It needs trend confirmation
+      (e.g., moving averages, higher highs/lows) and patience to sit through
+      pullbacks. Typical mistake: fighting the trend or exiting too early.
+
+  - id: mean-reversion
+    category: strategy
+    triggers: ["mean reversion", "what is mean reversion"]
+    match_type: contains
+    priority: 74
+    response: >-
+      Mean reversion bets that price stretched far from its average will snap
+      back. It works in ranges and calm markets and fails badly in strong trends
+      (fighting momentum). Tools include RSI/stochastic extremes and Bollinger
+      Bands. Typical mistake: catching a "falling knife" in a real downtrend
+      without a stop.
+
+  - id: momentum-trading
+    category: strategy
+    triggers: ["momentum trading", "momentum strategy", "what is momentum"]
+    match_type: contains
+    priority: 72
+    response: >-
+      Momentum trading buys strength and sells weakness, assuming moves persist.
+      It works when trends and volatility are high and fails at turning points
+      where momentum reverses sharply. Requires quick risk control. Typical
+      mistake: chasing late after most of the move is done.
+
+  - id: breakout-strategy
+    category: strategy
+    triggers: ["breakout strategy", "breakout trading", "trading breakouts"]
+    match_type: contains
+    priority: 72
+    response: >-
+      Breakout trading enters as price clears a key level, aiming to catch the new
+      move early. It works when breakouts have volume and follow-through and fails
+      on fakeouts in low-volume or ranging conditions. Requires volume/retest
+      confirmation. Typical mistake: entering every breakout without filtering
+      false ones.
+
+  - id: swing-trading
+    category: strategy
+    triggers: ["swing trading", "what is swing trading"]
+    match_type: contains
+    priority: 74
+    response: >-
+      Swing trading holds positions for days to weeks to capture medium-term
+      moves. It suits people who can't watch screens all day and works in
+      trending or swinging markets; it fails in flat, low-volatility chop.
+      Requires patience and wider stops. Typical mistake: overtrading or exiting
+      at the first wobble.
+
+  - id: scalping
+    category: strategy
+    triggers: ["scalping", "what is scalping", "scalp trading"]
+    match_type: contains
+    priority: 72
+    response: >-
+      Scalping takes many small, quick trades for tiny profits, relying on speed,
+      tight spreads, and high liquidity. It works in liquid, volatile markets and
+      fails when spreads/fees eat the small edge. Requires focus and strict risk
+      control. Typical mistake: letting one large loss erase many small wins.
+
+  - id: position-trading
+    category: strategy
+    triggers: ["position trading", "what is position trading"]
+    match_type: contains
+    priority: 70
+    response: >-
+      Position trading holds for weeks to months (or longer), following major
+      trends and often fundamentals. It ignores short-term noise and suits patient
+      traders; it fails if you can't tolerate large interim drawdowns. Typical
+      mistake: abandoning the thesis on normal volatility.
+
+  - id: day-trading
+    category: strategy
+    triggers: ["day trading", "what is day trading", "intraday trading"]
+    match_type: contains
+    priority: 72
+    response: >-
+      Day trading opens and closes positions within the same day, avoiding
+      overnight risk. It demands time, discipline, and a real edge; costs and
+      emotions make it hard, and most beginners underperform. Typical mistake:
+      overtrading and revenge trading after losses.
+
+  - id: grid-trading
+    category: strategy
+    triggers: ["grid trading", "grid bot"]
+    match_type: contains
+    priority: 60
+    response: >-
+      Grid trading places buy and sell orders at set intervals above and below a
+      price, profiting from oscillation in a range. It works in sideways markets
+      and can lose badly in a strong trend that runs away from the grid. Requires
+      range assumptions and capital allocation rules.
+
+  - id: arbitrage
+    category: strategy
+    triggers: ["arbitrage", "what is arbitrage"]
+    match_type: contains
+    priority: 60
+    response: >-
+      Arbitrage profits from price differences for the same asset across markets,
+      ideally low-risk. In practice, fees, transfer times, and speed competition
+      shrink or erase the edge for retail traders. Real arbitrage windows are
+      small and disappear fast.
+
+  - id: backtesting
+    category: strategy
+    triggers: ["backtesting", "backtest", "what is backtesting"]
+    match_type: contains
+    priority: 66
+    response: >-
+      Backtesting runs a strategy on historical data to estimate how it might have
+      performed. It helps validate an idea but can mislead through overfitting,
+      survivorship bias, and ignoring fees/slippage. Good backtests use out-of-
+      sample data and realistic costs.
+
+  - id: paper-trading
+    category: strategy
+    triggers: ["paper trading", "demo account", "practice trading"]
+    match_type: contains
+    priority: 64
+    response: >-
+      Paper trading practices a strategy with fake money in real-time conditions.
+      It is great for learning mechanics and testing rules without risk, but it
+      lacks the emotional pressure of real money, so live results often differ.
+      Use it to build process, then start small with real capital.
+
+  - id: trading-plan
+    category: strategy
+    triggers: ["trading plan", "what is a trading plan", "how to make a trading plan"]
+    match_type: contains
+    priority: 68
+    response: >-
+      A trading plan defines your setups, entry and exit rules, risk per trade,
+      position sizing, and review process in advance. It turns trading into a
+      repeatable process and reduces impulsive decisions. The best plan is one
+      simple enough that you actually follow it consistently.
+
+  # ------------------------------------------------------------------
+  # 15. MARKET PSYCHOLOGY
+  # ------------------------------------------------------------------
+  - id: what-is-fomo
+    category: psychology
+    triggers: ["what is fomo", "fomo", "fear of missing out"]
+    match_type: contains
+    priority: 78
+    response: >-
+      FOMO (Fear Of Missing Out) is the urge to jump into a fast-moving trade so
+      you don't miss gains, usually buying late at inflated prices after ignoring
+      your rules. It leads to poor entries and outsized risk. The antidote:
+      predefined setups and accepting that there is always another trade.
+
+  - id: revenge-trading
+    category: psychology
+    triggers: ["revenge trading", "what is revenge trading"]
+    match_type: contains
+    priority: 78
+    response: >-
+      Revenge trading is trying to immediately "win back" a loss by taking another
+      trade, often bigger and unplanned. It's a fight-or-flight reaction that
+      usually deepens losses. The fix: step away after a loss, stick to position
+      sizing, and use a daily loss limit.
+
+  - id: loss-aversion
+    category: psychology
+    triggers: ["loss aversion", "what is loss aversion"]
+    match_type: contains
+    priority: 76
+    response: >-
+      Loss aversion is the tendency to feel losses about twice as strongly as
+      equivalent gains. It makes traders hold losers too long (hoping to break
+      even) and cut winners too early (locking in small gains). Predefined stops
+      and targets counter this bias.
+
+  - id: confirmation-bias
+    category: psychology
+    triggers: ["confirmation bias", "what is confirmation bias"]
+    match_type: contains
+    priority: 74
+    response: >-
+      Confirmation bias is seeking information that supports your existing
+      position while dismissing contradictory evidence. Once in a trade, you may
+      ignore warning signs. The defense: define your invalidation level in
+      advance and actively look for reasons you might be wrong.
+
+  - id: overtrading
+    category: psychology
+    triggers: ["overtrading", "what is overtrading", "trading too much"]
+    match_type: contains
+    priority: 74
+    response: >-
+      Overtrading is taking too many trades - often from boredom, FOMO, or trying
+      to recover losses. It piles up fees and low-quality setups and drains focus.
+      Fewer, higher-quality trades usually beat constant activity. A trade quota or
+      checklist helps.
+
+  - id: fear-and-greed
+    category: psychology
+    triggers: ["fear and greed", "fear greed index", "greed"]
+    match_type: contains
+    priority: 72
+    response: >-
+      Fear and greed are the two dominant market emotions. Greed drives buying at
+      tops (euphoria); fear drives selling at bottoms (panic). Sentiment gauges
+      like a fear-and-greed index try to measure this. Contrarians watch extremes,
+      but sentiment alone is not a timing tool.
+
+  - id: overconfidence
+    category: psychology
+    triggers: ["overconfidence", "overconfident", "winning streak"]
+    match_type: contains
+    priority: 70
+    response: >-
+      Overconfidence often follows a winning streak, tempting bigger size and
+      looser rules just as risk is highest. A few good trades can feel like skill
+      when luck played a part. Keeping risk constant regardless of recent results
+      protects you from this trap.
+
+  - id: analysis-paralysis
+    category: psychology
+    triggers: ["analysis paralysis", "too much analysis", "cant decide"]
+    match_type: contains
+    priority: 66
+    response: >-
+      Analysis paralysis is over-analyzing with too many indicators until you
+      can't act (or miss the setup). It usually signals unclear rules. Simplifying
+      to a few reliable signals and a written plan restores decisiveness.
+
+  - id: recency-bias
+    category: psychology
+    triggers: ["recency bias", "recent trades bias"]
+    match_type: contains
+    priority: 64
+    response: >-
+      Recency bias overweights your most recent trades - a few losses make you
+      timid, a few wins reckless. It distorts risk decisions based on a tiny
+      sample. Judging your system over many trades, not the last few, reduces this
+      bias.
+
+  - id: herd-mentality
+    category: psychology
+    triggers: ["herd mentality", "herding", "following the crowd"]
+    match_type: contains
+    priority: 66
+    response: >-
+      Herd mentality is following the crowd into trades because everyone else is,
+      which fuels bubbles and panics. Crowds can be right in a trend but are often
+      wrong at extremes. Independent rules and risk limits keep you from buying
+      tops out of social pressure.
+
+  - id: discipline
+    category: psychology
+    triggers: ["trading discipline", "discipline", "how to be disciplined"]
+    match_type: contains
+    priority: 68
+    response: >-
+      Discipline is executing your plan consistently, especially when emotions
+      push otherwise. It's built through written rules, predefined risk, journaling,
+      and routines rather than willpower alone. Consistency matters more than any
+      single trade's outcome.
+
+  - id: trading-journal
+    category: psychology
+    triggers: ["trading journal", "journaling trades", "trade log"]
+    match_type: contains
+    priority: 66
+    response: >-
+      A trading journal records each trade's setup, reason, size, result, and how
+      you felt. Reviewing it exposes recurring mistakes and which setups actually
+      work for you. It turns experience into feedback and is one of the highest-
+      value habits for improvement.
+
+  - id: patience
+    category: psychology
+    triggers: ["patience in trading", "waiting for setup", "be patient"]
+    match_type: contains
+    priority: 62
+    response: >-
+      Patience means waiting for setups that fit your rules instead of forcing
+      trades. Most of trading is waiting; the edge comes from selectivity. Sitting
+      in cash is a valid position when nothing qualifies.
+
+  - id: emotional-control
+    category: psychology
+    triggers: ["emotional control", "controlling emotions", "trading emotions"]
+    match_type: contains
+    priority: 66
+    response: >-
+      Emotional control is managing fear and greed so they don't override your
+      plan. Techniques include predefining risk, sizing small enough to think
+      clearly, taking breaks after losses, and following a checklist. You can't
+      remove emotions, but you can reduce their influence on decisions.
+
+  # ------------------------------------------------------------------
+  # 16. MACRO / ECONOMICS / NEWS
+  # ------------------------------------------------------------------
+  - id: bull-bear-market
+    category: macro
+    triggers: ["bull market", "bear market", "what is a bull market", "what is a bear market", "bull vs bear"]
+    match_type: contains
+    priority: 78
+    response: >-
+      A bull market is a sustained period of rising prices and optimism; a bear
+      market is a sustained decline (often defined as roughly -20% from highs) with
+      pessimism. Trends can persist longer than expected in both, so labeling the
+      regime helps you pick suitable strategies rather than predicting the exact
+      turn.
+
+  - id: cpi
+    category: macro
+    triggers: ["what does cpi mean", "cpi", "consumer price index", "inflation data"]
+    match_type: contains
+    priority: 78
+    response: >-
+      CPI (Consumer Price Index) measures inflation - how fast consumer prices
+      rise. Hotter-than-expected CPI can imply higher interest rates, which often
+      pressures stocks and risk assets; cooler CPI can support them. Markets react
+      to the surprise versus expectations, not just the raw number, and moves can
+      be sharp around the release.
+
+  - id: interest-rates
+    category: macro
+    triggers: ["how does interest rate news affect", "interest rates", "interest rate", "rate hike", "rate cut"]
+    match_type: contains
+    priority: 78
+    response: >-
+      Interest-rate decisions strongly move markets. Higher rates raise borrowing
+      costs and make safe yields more attractive, often pressuring stocks and
+      crypto; rate cuts tend to support risk assets. Markets price expectations
+      ahead of time, so the surprise versus what was expected drives the reaction.
+
+  - id: fed
+    category: macro
+    triggers: ["what is the fed", "federal reserve", "fed", "fomc", "central bank"]
+    match_type: contains
+    priority: 72
+    response: >-
+      The Federal Reserve (Fed) is the US central bank; the FOMC sets interest-
+      rate policy. Its decisions and language ("hawkish" = leaning to higher
+      rates, "dovish" = leaning to lower) heavily influence global markets.
+      Traders watch meetings, minutes, and speeches for policy direction.
+
+  - id: gdp
+    category: macro
+    triggers: ["gdp", "gross domestic product", "what is gdp"]
+    match_type: contains
+    priority: 68
+    response: >-
+      GDP (Gross Domestic Product) measures the total output of an economy.
+      Strong growth supports corporate earnings and risk appetite; contraction
+      signals slowdown or recession. Markets weigh GDP alongside inflation and
+      rate expectations rather than in isolation.
+
+  - id: recession
+    category: macro
+    triggers: ["recession", "what is a recession"]
+    match_type: contains
+    priority: 68
+    response: >-
+      A recession is a significant, broad decline in economic activity, often
+      described as two consecutive quarters of shrinking GDP. It typically brings
+      falling earnings and risk-off sentiment, though markets are forward-looking
+      and can bottom before the economy does.
+
+  - id: nfp
+    category: macro
+    triggers: ["nfp", "non farm payrolls", "jobs report", "unemployment data"]
+    match_type: contains
+    priority: 66
+    response: >-
+      NFP (Non-Farm Payrolls) is a monthly US jobs report that moves markets. A
+      strong labor market can imply the central bank keeps rates higher for
+      longer; a weak one can raise cut expectations. Like other releases, the
+      surprise versus forecast drives the reaction.
+
+  - id: inflation
+    category: macro
+    triggers: ["what is inflation", "inflation"]
+    match_type: contains
+    priority: 70
+    response: >-
+      Inflation is the rate at which prices rise, eroding purchasing power. High
+      inflation often pushes central banks to raise rates, which can pressure
+      stocks and bonds; moderate, stable inflation is generally healthy. It is a
+      core driver of monetary policy and market direction.
+
+  - id: deflation
+    category: macro
+    triggers: ["deflation", "what is deflation"]
+    match_type: contains
+    priority: 60
+    response: >-
+      Deflation is a sustained fall in prices. It can sound good but often signals
+      weak demand and can worsen debt burdens and spending, which central banks
+      try to avoid. It's the opposite problem to inflation and also shapes policy.
+
+  - id: safe-haven
+    category: macro
+    triggers: ["safe haven", "safe haven assets", "flight to safety"]
+    match_type: contains
+    priority: 60
+    response: >-
+      Safe-haven assets (e.g., gold, certain government bonds, sometimes the US
+      dollar) tend to hold value or rise when markets are fearful. Traders rotate
+      into them during "risk-off" periods. Their behavior can shift over time, so
+      "safe" is relative, not guaranteed.
+
+  - id: risk-on-risk-off
+    category: macro
+    triggers: ["risk on", "risk off", "risk-on risk-off", "risk sentiment"]
+    match_type: contains
+    priority: 62
+    response: >-
+      "Risk-on" is when investors favor higher-risk assets (stocks, crypto) amid
+      optimism; "risk-off" is when they flee to safer assets amid fear.
+      Recognizing the regime helps explain why correlated assets move together and
+      why some setups work better in one environment than the other.
+
+  - id: market-cap
+    category: macro
+    triggers: ["market cap", "market capitalization", "what is market cap"]
+    match_type: contains
+    priority: 64
+    response: >-
+      Market capitalization is price multiplied by the number of outstanding
+      shares or coins - the total value of the asset. It gauges size and, loosely,
+      stability: large caps tend to be less volatile than small caps. It is not the
+      same as the money invested or the liquidity available.
+
+  # ------------------------------------------------------------------
+  # 17. ORDER TYPES & MARKET MECHANICS
+  # ------------------------------------------------------------------
+  - id: market-order
+    category: mechanics
+    triggers: ["market order", "what is a market order"]
+    match_type: contains
+    priority: 72
+    response: >-
+      A market order executes immediately at the best available price. It
+      guarantees the fill but not the price - in fast or thin markets you may get
+      slippage (a worse price than expected). Good for speed, less so for precise
+      entries.
+
+  - id: limit-order
+    category: mechanics
+    triggers: ["limit order", "what is a limit order"]
+    match_type: contains
+    priority: 72
+    response: >-
+      A limit order executes only at your specified price or better. It gives
+      price control and avoids slippage but may not fill if price never reaches
+      your level. Good for precise entries and exits when you can be patient.
+
+  - id: stop-order
+    category: mechanics
+    triggers: ["stop order", "stop limit", "stop market", "buy stop", "sell stop"]
+    match_type: contains
+    priority: 68
+    response: >-
+      A stop order triggers once price hits a set level - commonly used for
+      stop-losses or breakout entries. A stop-market fills at market once
+      triggered (fast, possible slippage); a stop-limit becomes a limit order
+      (price control, risk of no fill). Choose based on whether certainty of fill
+      or price matters more.
+
+  - id: slippage
+    category: mechanics
+    triggers: ["slippage", "what is slippage"]
+    match_type: contains
+    priority: 68
+    response: >-
+      Slippage is the difference between the expected price and the actual fill
+      price, common with market orders in fast or illiquid markets. It can help or
+      (more often) hurt. Using limit orders and trading liquid instruments reduces
+      it.
+
+  - id: spread
+    category: mechanics
+    triggers: ["bid ask spread", "spread", "bid ask", "bid-ask"]
+    match_type: contains
+    priority: 68
+    response: >-
+      The bid-ask spread is the gap between the highest price buyers offer (bid)
+      and the lowest sellers accept (ask). It's a real cost of trading - you buy
+      at the ask and sell at the bid. Liquid assets have tight spreads; illiquid
+      ones have wide spreads that eat into profits.
+
+  - id: order-book
+    category: mechanics
+    triggers: ["order book", "what is an order book", "depth of market"]
+    match_type: contains
+    priority: 64
+    response: >-
+      An order book lists resting buy (bid) and sell (ask) orders at each price,
+      showing supply and demand and market depth. Large orders can act as
+      temporary support/resistance. Beware "spoofing," where fake orders are
+      placed and pulled to mislead.
+
+  - id: leverage-vs-margin
+    category: mechanics
+    triggers: ["leverage vs margin", "difference between leverage and margin"]
+    match_type: contains
+    priority: 60
+    response: >-
+      Margin is the collateral you put up; leverage is the multiple of exposure
+      that collateral controls. They're two sides of the same trade: posting less
+      margin for the same position means higher leverage - and higher risk of
+      liquidation.
+
+  - id: slippage-vs-spread
+    category: mechanics
+    triggers: ["slippage vs spread", "spread vs slippage"]
+    match_type: contains
+    priority: 58
+    response: >-
+      The spread is the known, ever-present gap between bid and ask you pay on
+      entry/exit. Slippage is the extra, variable difference between your expected
+      price and the actual fill, mostly on market orders in fast/thin conditions.
+      Both are trading costs to minimize.
+
+  - id: fees
+    category: mechanics
+    triggers: ["trading fees", "fees", "maker taker", "commission"]
+    match_type: contains
+    priority: 62
+    response: >-
+      Fees include commissions and exchange fees; many venues use a maker-taker
+      model where adding liquidity (maker) costs less than removing it (taker).
+      Fees compound heavily for active traders and can turn a marginal strategy
+      into a losing one, so factor them into every plan.
+
+  # ------------------------------------------------------------------
+  # 18. CRYPTO-SPECIFIC
+  # ------------------------------------------------------------------
+  - id: what-is-bitcoin
+    category: crypto
+    triggers: ["what is bitcoin", "bitcoin", "btc"]
+    match_type: contains
+    priority: 66
+    response: >-
+      Bitcoin (BTC) is the first and largest cryptocurrency, a decentralized
+      digital asset secured by a blockchain with a capped supply of 21 million.
+      It's often treated as the market's benchmark; its moves frequently set the
+      tone for other cryptocurrencies. This is general information, not investment
+      advice.
+
+  - id: what-is-ethereum
+    category: crypto
+    triggers: ["what is ethereum", "ethereum", "eth"]
+    match_type: contains
+    priority: 62
+    response: >-
+      Ethereum (ETH) is a blockchain that runs smart contracts and decentralized
+      apps, with ETH as its native asset used for fees ("gas"). It underpins much
+      of DeFi and NFTs. General information only, not advice.
+
+  - id: altcoin
+    category: crypto
+    triggers: ["altcoin", "what is an altcoin", "alts"]
+    match_type: contains
+    priority: 60
+    response: >-
+      An altcoin is any cryptocurrency other than Bitcoin. Altcoins are usually
+      more volatile and less liquid than BTC, offering bigger swings and bigger
+      risk. Their moves often amplify Bitcoin's direction, especially in strong
+      trends.
+
+  - id: stablecoin
+    category: crypto
+    triggers: ["stablecoin", "what is a stablecoin", "usdt", "usdc"]
+    match_type: contains
+    priority: 60
+    response: >-
+      A stablecoin aims to hold a steady value, usually pegged to a currency like
+      the US dollar (e.g., USDT, USDC). Traders use them to park value and move
+      between positions without leaving crypto. Peg stability depends on the
+      issuer's reserves and mechanism, which carry their own risks.
+
+  - id: market-dominance
+    category: crypto
+    triggers: ["bitcoin dominance", "btc dominance", "market dominance"]
+    match_type: contains
+    priority: 56
+    response: >-
+      Bitcoin dominance is BTC's share of the total crypto market cap. Rising
+      dominance often means money is rotating into BTC (or out of alts); falling
+      dominance can accompany "alt seasons." It's a rotation gauge, not a direct
+      buy/sell signal.
+
+  - id: halving
+    category: crypto
+    triggers: ["bitcoin halving", "halving", "what is the halving"]
+    match_type: contains
+    priority: 56
+    response: >-
+      The Bitcoin halving roughly every four years cuts the new-supply reward to
+      miners in half, slowing issuance. It's widely watched for its supply effect,
+      though price outcomes vary and depend on demand and broader conditions.
+      History is not a guarantee.
+
+  # ------------------------------------------------------------------
+  # 19. ANALYTICAL INTERPRETATION (non-directive)
+  # ------------------------------------------------------------------
+  - id: rsi-low-is-it-buy
+    category: interpretation
+    triggers: ["rsi is 28", "rsi 28 is it a buy", "low rsi buy", "is oversold a buy", "rsi low should i buy"]
+    match_type: contains
+    priority: 74
+    response: >-
+      A low RSI (e.g., 28) signals an oversold condition, but oversold alone is
+      not a buy. Consider: is price above or below the 200 EMA (trend)? Is volume
+      confirming or fading? Is price near real support? Is there bullish
+      divergence? Oversold in a downtrend with weak volume often just means "still
+      falling." Look for confirmation before concluding anything. Type "analyze"
+      to walk through the setup step by step.
+
+  - id: rsi-high-is-it-sell
+    category: interpretation
+    triggers: ["rsi is 75", "rsi 75 sell", "high rsi sell", "is overbought a sell", "rsi high should i sell"]
+    match_type: contains
+    priority: 72
+    response: >-
+      A high RSI (e.g., 75) is overbought, but that is not automatically a sell.
+      In a strong uptrend RSI can stay overbought for a long time. Check trend
+      (price vs 200 EMA), whether volume supports the move, proximity to
+      resistance, and any bearish divergence. Use confirmation rather than
+      reacting to the reading alone.
+
+  - id: should-i-buy
+    category: interpretation
+    triggers: ["should i buy", "should i sell", "is it a good time to buy", "buy now", "good entry"]
+    match_type: contains
+    priority: 70
+    response: >-
+      I don't give buy/sell recommendations - I help you analyze. A useful
+      framework: define the trend, find a level (support/resistance), wait for a
+      trigger (candle/breakout/retest), confirm with volume, and pre-set your stop
+      and target so risk/reward makes sense. Type "analyze" and I'll walk through
+      the setup with you.
+
+  - id: price-target-prediction
+    category: interpretation
+    triggers: ["will price go up", "price prediction", "where will price go", "predict price", "target prediction"]
+    match_type: contains
+    priority: 70
+    response: >-
+      No tool or bot can reliably predict future price - anyone claiming certainty
+      is a red flag. Analysis is about probabilities and risk, not forecasts. Focus
+      on identifying levels, confirming with volume/structure, and controlling risk
+      so you're fine whether or not the move happens.
+
+  - id: confluence
+    category: interpretation
+    triggers: ["confluence", "what is confluence", "multiple signals"]
+    match_type: contains
+    priority: 68
+    response: >-
+      Confluence is when several independent signals point the same way - e.g., a
+      support level, a Fibonacci zone, a bullish candle, and rising volume all
+      lining up. More confluence generally means a higher-quality setup, though it
+      never guarantees the outcome. It's a way to filter for stronger setups.
+
+  - id: confirmation-signal
+    category: interpretation
+    triggers: ["confirmation", "what is confirmation", "confirm a signal", "wait for confirmation"]
+    match_type: contains
+    priority: 68
+    response: >-
+      Confirmation is extra evidence that a signal is playing out before you act -
+      a candle close beyond a level, a successful retest, or a volume spike. It
+      trades a slightly later entry for fewer false signals. It's a core habit for
+      avoiding fakeouts.
+
+  - id: invalidation
+    category: interpretation
+    triggers: ["invalidation", "invalidation level", "when is my idea wrong"]
+    match_type: contains
+    priority: 66
+    response: >-
+      An invalidation level is the price where your trade idea is proven wrong -
+      often just beyond the support/resistance or structure you're relying on. It
+      is the logical place for your stop-loss. Defining it before entry keeps risk
+      objective instead of emotional.
+
+  - id: timing-the-market
+    category: interpretation
+    triggers: ["timing the market", "time the market", "catch the bottom", "catch the top"]
+    match_type: contains
+    priority: 64
+    response: >-
+      Perfectly timing tops and bottoms is extremely hard and usually a losing
+      pursuit. Most durable approaches focus on process - reacting to confirmed
+      signals and managing risk - rather than predicting exact turns. "Time in the
+      market" often beats "timing the market" for long-term investors.
+
+  # ------------------------------------------------------------------
+  # 20. TIMEFRAMES
+  # ------------------------------------------------------------------
+  - id: what-is-timeframe
+    category: timeframes
+    triggers: ["what is a timeframe", "timeframe", "time frame", "chart timeframe"]
+    match_type: contains
+    priority: 68
+    response: >-
+      A timeframe is the period each candle represents (1m, 5m, 1h, 4h, daily,
+      weekly). Lower timeframes show detail and noise and suit short-term trading;
+      higher timeframes show the bigger trend and are more reliable. The best
+      timeframe depends on your strategy and how long you hold.
+
+  - id: multi-timeframe-analysis
+    category: timeframes
+    triggers: ["multi timeframe", "multiple timeframe analysis", "higher timeframe", "mtf"]
+    match_type: contains
+    priority: 66
+    response: >-
+      Multi-timeframe analysis reads the trend on a higher timeframe and times
+      entries on a lower one. Trading in the direction of the higher-timeframe
+      trend generally improves the odds. It helps avoid taking a lower-timeframe
+      signal that fights the bigger picture.
+
+  - id: which-timeframe
+    category: timeframes
+    triggers: ["which timeframe should i use", "best timeframe", "what timeframe"]
+    match_type: contains
+    priority: 62
+    response: >-
+      There's no universally best timeframe - it depends on your style. Scalpers
+      use seconds-to-minutes, day traders minutes-to-hours, swing traders
+      hours-to-days, investors daily-to-weekly. Lower timeframes need more
+      attention and generate more noise. Pick one that matches the time you can
+      actually commit.
+
+  # ------------------------------------------------------------------
+  # 21. GENERAL / BEGINNER
+  # ------------------------------------------------------------------
+  - id: how-to-start-trading
+    category: general
+    triggers: ["how do i start trading", "how to start trading", "getting started", "beginner trading"]
+    match_type: contains
+    priority: 70
+    response: >-
+      A sensible path: learn the basics (orders, risk, one strategy), practice on
+      a demo/paper account, write a simple trading plan, then start with small
+      real size. Prioritize risk management and consistency over big wins. Most
+      progress comes from surviving mistakes cheaply while you learn.
+
+  - id: what-is-trading
+    category: general
+    triggers: ["what is trading", "define trading"]
+    match_type: contains
+    priority: 60
+    response: >-
+      Trading is buying and selling assets to profit from price changes, usually
+      over shorter horizons than investing. It requires an edge, risk control, and
+      discipline. It is not easy money - most of the skill is in managing losses
+      and emotions.
+
+  - id: trading-vs-investing
+    category: general
+    triggers: ["trading vs investing", "difference between trading and investing"]
+    match_type: contains
+    priority: 66
+    response: >-
+      Investing generally means holding quality assets for the long term to grow
+      wealth; trading means shorter-term buying and selling to profit from price
+      moves. Investing leans on fundamentals and patience; trading leans on timing
+      and risk control. They demand different mindsets and time commitments.
+
+  - id: technical-vs-fundamental
+    category: general
+    triggers: ["technical vs fundamental", "technical analysis vs fundamental analysis", "ta vs fa"]
+    match_type: contains
+    priority: 66
+    response: >-
+      Technical analysis studies price and volume patterns to time trades;
+      fundamental analysis studies underlying value (earnings, economy, adoption)
+      to judge worth. Many traders combine them - fundamentals for "what" to trade,
+      technicals for "when." Neither predicts the future with certainty.
+
+  - id: what-is-fundamental-analysis
+    category: general
+    triggers: ["what is fundamental analysis", "fundamental analysis", "fundamentals"]
+    match_type: contains
+    priority: 64
+    response: >-
+      Fundamental analysis estimates an asset's intrinsic value from data like
+      earnings, revenue, the economy, or (in crypto) adoption and tokenomics. If
+      price is far below estimated value, it may be "cheap," and vice versa. It's
+      about "what and why" rather than short-term timing.
+
+  - id: what-is-technical-analysis
+    category: general
+    triggers: ["what is technical analysis", "technical analysis", "ta"]
+    match_type: contains
+    priority: 64
+    response: >-
+      Technical analysis studies charts - price, volume, patterns, and indicators
+      - to gauge probability and time entries and exits. It assumes price reflects
+      available information and that behavior tends to repeat. It deals in odds and
+      context, not certainties.
+
+  - id: win-rate
+    category: general
+    triggers: ["win rate", "what is win rate", "winning percentage"]
+    match_type: contains
+    priority: 64
+    response: >-
+      Win rate is the percentage of trades that are profitable. It only matters
+      alongside risk/reward: a 40% win rate with 3:1 R:R can be very profitable,
+      while a 70% win rate with tiny wins and big losses loses money. Expectancy
+      (average result per trade) is what counts.
+
+  - id: expectancy
+    category: general
+    triggers: ["expectancy", "what is expectancy", "trading edge", "what is an edge"]
+    match_type: contains
+    priority: 62
+    response: >-
+      Expectancy is the average amount you expect to win or lose per trade over
+      many trades, combining win rate and average win/loss. Positive expectancy
+      means the system makes money over time. An "edge" is any repeatable source
+      of positive expectancy.
+
+  - id: compounding
+    category: general
+    triggers: ["compounding", "compound interest", "compound returns"]
+    match_type: contains
+    priority: 62
+    response: >-
+      Compounding is earning returns on your returns, so growth accelerates over
+      time. Small, consistent gains compound powerfully over years, which is why
+      protecting capital and avoiding big drawdowns matters so much - losses
+      compound too.
+
+  - id: liquidity-vs-volatility
+    category: general
+    triggers: ["liquidity vs volatility", "volatility vs liquidity"]
+    match_type: contains
+    priority: 58
+    response: >-
+      Liquidity is how easily you can trade without moving price; volatility is
+      how much price moves. They're different: an asset can be liquid yet volatile.
+      Low liquidity often amplifies volatility and slippage, making risk harder to
+      control.
+
+  - id: what-is-volatility
+    category: general
+    triggers: ["what is volatility", "volatility"]
+    match_type: contains
+    priority: 66
+    response: >-
+      Volatility is how much and how fast price moves. High volatility means
+      bigger swings - more opportunity and more risk - so stops and position sizes
+      should adapt to it (e.g., using ATR). It is neither good nor bad by itself;
+      it's a condition to manage.
+
+  - id: gap
+    category: general
+    triggers: ["what is a gap", "price gap", "gap up", "gap down"]
+    match_type: contains
+    priority: 58
+    response: >-
+      A gap is a jump between one candle's close and the next candle's open, with
+      no trading in between - common after news or over weekends. Gaps can signal
+      strong sentiment and sometimes "fill" (price returns to the gap) later. They
+      also mean a stop may execute beyond its set level.
+
+  - id: circuit-breaker
+    category: general
+    triggers: ["circuit breaker", "trading halt", "halt"]
+    match_type: contains
+    priority: 54
+    response: >-
+      A circuit breaker is an automatic trading halt triggered by extreme price
+      moves, meant to curb panic and let information settle. Halts can trap
+      positions temporarily and cause gaps when trading resumes, which is a risk to
+      plan for.
+
+  - id: what-is-a-broker
+    category: general
+    triggers: ["what is a broker", "broker", "exchange vs broker"]
+    match_type: contains
+    priority: 56
+    response: >-
+      A broker or exchange is the platform you trade through. Key things to
+      compare: regulation/security, fees and spreads, liquidity, available markets,
+      and reliability. Your platform choice affects real costs and execution
+      quality, so it matters more than beginners expect.
+
+  - id: portfolio
+    category: general
+    triggers: ["what is a portfolio", "portfolio", "portfolio management"]
+    match_type: contains
+    priority: 56
+    response: >-
+      A portfolio is your overall collection of holdings. Managing it means
+      balancing risk across positions, sizing each appropriately, and considering
+      correlation so you're not unknowingly making one big bet. Portfolio-level
+      risk matters as much as any single trade.
+
+  - id: rebalancing
+    category: general
+    triggers: ["rebalancing", "rebalance portfolio", "portfolio rebalancing"]
+    match_type: contains
+    priority: 54
+    response: >-
+      Rebalancing periodically returns a portfolio to its target allocations by
+      trimming what grew and adding to what lagged. It enforces "sell high, buy
+      low" mechanically and controls risk drift. The trade-offs are transaction
+      costs and possible taxes.
+
+  # ------------------------------------------------------------------
+  # 22. MORE INDICATORS & TOOLS
+  # ------------------------------------------------------------------
+  - id: williams-r
+    category: technical-analysis
+    triggers: ["williams r", "williams %r", "percent r"]
+    match_type: contains
+    priority: 58
+    response: >-
+      Williams %R is a momentum oscillator between 0 and -100. Readings above -20
+      are considered overbought and below -80 oversold. It's similar to Stochastic
+      and, like other oscillators, is most useful in ranges and needs confirmation
+      in trends.
+
+  - id: mfi
+    category: technical-analysis
+    triggers: ["mfi", "money flow index"]
+    match_type: contains
+    priority: 58
+    response: >-
+      MFI (Money Flow Index) is like RSI but incorporates volume, sometimes called
+      a volume-weighted RSI. Above 80 is overbought, below 20 oversold. Because it
+      uses volume, divergences can hint that a move lacks money-flow support.
+
+  - id: keltner-channel
+    category: technical-analysis
+    triggers: ["keltner channel", "keltner"]
+    match_type: contains
+    priority: 54
+    response: >-
+      Keltner Channels are ATR-based bands around an EMA. They're similar to
+      Bollinger Bands but use volatility (ATR) rather than standard deviation.
+      Traders combine them with Bollinger Bands to spot squeezes and breakouts.
+
+  - id: donchian-channel
+    category: technical-analysis
+    triggers: ["donchian channel", "donchian"]
+    match_type: contains
+    priority: 54
+    response: >-
+      Donchian Channels plot the highest high and lowest low over N periods. A
+      break above the upper channel is a classic breakout signal (used in the
+      Turtle system). They're simple trend/breakout tools that whipsaw in ranges.
+
+  - id: pivot-points
+    category: technical-analysis
+    triggers: ["pivot points", "pivot point", "daily pivots"]
+    match_type: contains
+    priority: 58
+    response: >-
+      Pivot points are calculated support/resistance levels based on the prior
+      period's high, low, and close, popular with intraday traders. Price above
+      the central pivot leans bullish, below it bearish. They're reference levels,
+      most useful combined with other confirmation.
+
+  - id: heikin-ashi
+    category: technical-analysis
+    triggers: ["heikin ashi", "heiken ashi", "heikin-ashi"]
+    match_type: contains
+    priority: 54
+    response: >-
+      Heikin-Ashi candles average price data to smooth noise and make trends
+      easier to see - long same-color candles with small wicks suggest a strong
+      trend. The trade-off: they hide the true open/close, so they're for reading
+      trend, not exact prices.
+
+  - id: renko
+    category: technical-analysis
+    triggers: ["renko", "renko chart"]
+    match_type: contains
+    priority: 50
+    response: >-
+      Renko charts draw bricks based only on price movement of a fixed size,
+      ignoring time. They filter noise and highlight trends and levels but lag and
+      omit timing/volume detail. They're a way to simplify choppy price action.
+
+  - id: super-trend
+    category: technical-analysis
+    triggers: ["supertrend", "super trend"]
+    match_type: contains
+    priority: 52
+    response: >-
+      SuperTrend is an ATR-based indicator that plots a line flipping above or
+      below price to show trend direction and act as a trailing stop. It works in
+      trends and whipsaws in ranges - common behavior for trend-following tools.
+
+  - id: fear-greed-index
+    category: technical-analysis
+    triggers: ["crypto fear and greed index", "fear and greed index value"]
+    match_type: contains
+    priority: 56
+    response: >-
+      The Fear & Greed Index scores market sentiment from extreme fear to extreme
+      greed using inputs like volatility and momentum. Extremes can mark turning
+      points (contrarian view), but sentiment can stay extreme for a while, so
+      it's context, not a trigger.
+
+  - id: open-interest
+    category: technical-analysis
+    triggers: ["open interest", "what is open interest", "oi"]
+    match_type: contains
+    priority: 56
+    response: >-
+      Open interest is the number of outstanding derivatives contracts. Rising OI
+      with rising price suggests new money backing the move; falling OI suggests
+      positions closing. Combined with price and funding, it hints at how crowded
+      or committed a move is.
+
+  - id: long-short-ratio
+    category: technical-analysis
+    triggers: ["long short ratio", "long/short ratio"]
+    match_type: contains
+    priority: 52
+    response: >-
+      The long/short ratio compares traders positioned long versus short. Extreme
+      readings can indicate crowded positioning that's vulnerable to a squeeze in
+      the opposite direction. It's a sentiment/positioning gauge, not a stand-alone
+      signal.
+
+  # ------------------------------------------------------------------
+  # 23. DERIVATIVES & OPTIONS
+  # ------------------------------------------------------------------
+  - id: what-are-futures
+    category: derivatives
+    triggers: ["what are futures", "futures", "futures contract"]
+    match_type: contains
+    priority: 62
+    response: >-
+      A futures contract is an agreement to buy or sell an asset at a set price on
+      a future date. They allow leverage and both long and short positions.
+      Leverage magnifies risk, and perpetual futures add funding costs, so they
+      need careful risk control.
+
+  - id: what-are-options
+    category: derivatives
+    triggers: ["what are options", "options", "options trading"]
+    match_type: contains
+    priority: 62
+    response: >-
+      An option gives the right (not obligation) to buy (call) or sell (put) an
+      asset at a set price before expiry, for a premium. Options can hedge or
+      speculate with defined risk for buyers, but they involve time decay and
+      complexity. Beginners should learn the basics carefully before trading them.
+
+  - id: call-vs-put
+    category: derivatives
+    triggers: ["call vs put", "call option", "put option", "calls and puts"]
+    match_type: contains
+    priority: 58
+    response: >-
+      A call option profits if the underlying rises above the strike; a put profits
+      if it falls below the strike. Buyers pay a premium and risk only that premium;
+      sellers collect premium but take on larger, sometimes open-ended risk.
+
+  - id: options-greeks
+    category: derivatives
+    triggers: ["options greeks", "greeks", "delta gamma theta vega"]
+    match_type: contains
+    priority: 52
+    response: >-
+      The "Greeks" measure an option's sensitivities: delta (to price), gamma (to
+      delta), theta (to time decay), and vega (to volatility). They help manage
+      option risk. Theta means options lose value as expiry approaches, all else
+      equal.
+
+  - id: implied-volatility
+    category: derivatives
+    triggers: ["implied volatility", "iv", "what is implied volatility"]
+    match_type: contains
+    priority: 54
+    response: >-
+      Implied volatility (IV) is the market's expectation of future volatility
+      priced into options. High IV makes options more expensive; a drop in IV can
+      hurt option buyers even if price moves their way ("IV crush," common after
+      events). It's central to options pricing.
+
+  - id: contract-expiry
+    category: derivatives
+    triggers: ["expiry", "option expiration", "contract expiry", "expiration date"]
+    match_type: contains
+    priority: 50
+    response: >-
+      Expiry is when a derivative contract settles. As options approach expiry,
+      time value decays fastest and price behavior can get sharp near key strikes.
+      Large expiries can add volatility around those dates, which is worth planning
+      for.
+
+  # ------------------------------------------------------------------
+  # 24. MONEY MANAGEMENT & PERSONAL FINANCE
+  # ------------------------------------------------------------------
+  - id: emergency-fund
+    category: money
+    triggers: ["emergency fund", "should i have savings", "rainy day fund"]
+    match_type: contains
+    priority: 58
+    response: >-
+      An emergency fund is cash set aside (often 3-6 months of expenses) before
+      taking market risk, so you never have to sell investments at a bad time to
+      cover life costs. Trading with money you can't afford to lose adds emotional
+      pressure that hurts decisions. This is general education, not personal advice.
+
+  - id: risk-capital
+    category: money
+    triggers: ["risk capital", "money i can afford to lose", "how much money to trade"]
+    match_type: contains
+    priority: 62
+    response: >-
+      Risk capital is money you can afford to lose without affecting essential
+      living costs. Trading only with risk capital keeps losses from becoming life
+      problems and reduces fear-driven mistakes. Never trade rent, bills, or
+      borrowed money you can't repay.
+
+  - id: kelly-criterion
+    category: money
+    triggers: ["kelly criterion", "kelly formula", "optimal bet size"]
+    match_type: contains
+    priority: 52
+    response: >-
+      The Kelly Criterion is a formula for bet sizing that maximizes long-term
+      growth based on your edge and odds. In practice, traders use a fraction of
+      "full Kelly" because full Kelly is very volatile and sensitive to inaccurate
+      inputs. It illustrates why edge and consistency drive sizing.
+
+  - id: fixed-fractional
+    category: money
+    triggers: ["fixed fractional", "fixed percentage risk", "fixed fractional sizing"]
+    match_type: contains
+    priority: 54
+    response: >-
+      Fixed-fractional sizing risks the same percentage of your account on every
+      trade. As the account grows, position size grows; after losses it shrinks -
+      automatically reducing risk in drawdowns. It's a simple, robust approach for
+      managing risk consistently.
+
+  - id: pay-yourself
+    category: money
+    triggers: ["withdraw profits", "take profits out", "pay yourself"]
+    match_type: contains
+    priority: 50
+    response: >-
+      Periodically withdrawing some profits turns paper gains into real money and
+      reduces the temptation to over-risk a growing balance. Balancing withdrawals
+      against compounding is a personal choice. General education, not financial
+      advice.
+
+  # ------------------------------------------------------------------
+  # 25. MORE PSYCHOLOGY & BEHAVIOR
+  # ------------------------------------------------------------------
+  - id: anchoring-bias
+    category: psychology
+    triggers: ["anchoring bias", "anchoring", "anchored to price"]
+    match_type: contains
+    priority: 60
+    response: >-
+      Anchoring bias is fixating on a reference price (like your entry or a prior
+      high) and judging everything relative to it. It can make you hold a loser
+      "until it gets back to X" instead of assessing the setup now. Focus on
+      current structure, not old anchors.
+
+  - id: sunk-cost
+    category: psychology
+    triggers: ["sunk cost", "sunk cost fallacy"]
+    match_type: contains
+    priority: 60
+    response: >-
+      The sunk-cost fallacy is staying in a losing trade because of what you've
+      already lost or invested. Past losses are gone regardless of what you do next;
+      the only question is whether the trade makes sense now. A predefined stop
+      prevents sunk-cost thinking.
+
+  - id: gamblers-fallacy
+    category: psychology
+    triggers: ["gamblers fallacy", "gambler's fallacy", "due for a win"]
+    match_type: contains
+    priority: 58
+    response: >-
+      The gambler's fallacy is believing a losing streak makes a win "due" (or vice
+      versa). Independent trades don't owe you a result; the market has no memory of
+      your losses. Size and rules should stay the same regardless of recent streaks.
+
+  - id: hope-fear-cycle
+    category: psychology
+    triggers: ["hope and fear", "hoping trade recovers", "praying for recovery"]
+    match_type: contains
+    priority: 58
+    response: >-
+      Hoping a losing trade recovers is a warning sign you've abandoned your plan.
+      Hope is not a strategy - a predefined stop makes the exit decision before
+      emotion takes over. If you're hoping, the position is probably too big or the
+      stop wasn't set.
+
+  - id: greed-taking-profit
+    category: psychology
+    triggers: ["when to take profit", "cutting winners", "letting profits run", "greed profit"]
+    match_type: contains
+    priority: 60
+    response: >-
+      Deciding exits in advance (targets, trailing stops, or scaling out) beats
+      reacting to greed or fear in the moment. Loss aversion tempts cutting winners
+      early; greed tempts holding too long. A written exit plan keeps profit-taking
+      consistent.
+
+  - id: fud
+    category: psychology
+    triggers: ["fud", "what is fud", "fear uncertainty doubt"]
+    match_type: contains
+    priority: 56
+    response: >-
+      FUD (Fear, Uncertainty, Doubt) refers to negative information or sentiment
+      that spooks traders into selling, sometimes spread deliberately. Reacting to
+      headlines instead of your plan leads to panic exits. Separate verified facts
+      from noise before acting.
+
+  - id: euphoria
+    category: psychology
+    triggers: ["euphoria", "market euphoria", "everyone getting rich"]
+    match_type: contains
+    priority: 54
+    response: >-
+      Euphoria - when everyone seems to be winning and risk feels irrelevant -
+      often appears near market tops. It fuels FOMO and over-leverage right when
+      risk is highest. Extreme optimism is a cue to tighten risk, not loosen it.
+
+  - id: capitulation
+    category: psychology
+    triggers: ["capitulation", "market capitulation", "panic selling"]
+    match_type: contains
+    priority: 54
+    response: >-
+      Capitulation is mass panic selling where holders give up, often on high
+      volume near lows. It can mark exhaustion of sellers and precede bottoms,
+      though catching it is risky without confirmation. It's the emotional mirror
+      of euphoria.
+
+  # ------------------------------------------------------------------
+  # 26. MORE MACRO & MARKETS
+  # ------------------------------------------------------------------
+  - id: yield-curve
+    category: macro
+    triggers: ["yield curve", "inverted yield curve", "what is the yield curve"]
+    match_type: contains
+    priority: 58
+    response: >-
+      The yield curve plots government-bond yields across maturities. Normally
+      longer-term yields are higher; an "inverted" curve (short-term above
+      long-term) has historically preceded recessions. It's a closely watched macro
+      signal, though timing varies widely.
+
+  - id: liquidity-macro
+    category: macro
+    triggers: ["market liquidity macro", "global liquidity", "money supply"]
+    match_type: contains
+    priority: 52
+    response: >-
+      Macro liquidity refers to how much money is flowing through the financial
+      system, influenced by central-bank policy. Expanding liquidity tends to
+      support risk assets; tightening tends to pressure them. It's a big-picture
+      backdrop, not a precise timing tool.
+
+  - id: earnings-report
+    category: macro
+    triggers: ["earnings report", "earnings season", "earnings"]
+    match_type: contains
+    priority: 58
+    response: >-
+      Earnings reports reveal a company's results versus expectations and can cause
+      large, fast price moves and gaps. Stocks react to the surprise and guidance,
+      not just the raw numbers. Holding through earnings adds event risk that some
+      traders avoid.
+
+  - id: dividends
+    category: macro
+    triggers: ["dividends", "what is a dividend", "dividend yield"]
+    match_type: contains
+    priority: 54
+    response: >-
+      A dividend is a share of profits paid to shareholders. Dividend yield is the
+      annual dividend divided by price. Dividends provide income and can signal
+      financial health, but a very high yield can also reflect a falling price or
+      risk. General education, not advice.
+
+  - id: sector-rotation
+    category: macro
+    triggers: ["sector rotation", "rotating sectors"]
+    match_type: contains
+    priority: 50
+    response: >-
+      Sector rotation is money moving between market sectors as the economic cycle
+      shifts (e.g., into defensives when growth slows). Watching which sectors lead
+      or lag can hint at the market's risk appetite and cycle stage.
+
+  - id: black-swan
+    category: macro
+    triggers: ["black swan", "black swan event", "tail risk"]
+    match_type: contains
+    priority: 56
+    response: >-
+      A black swan is a rare, high-impact event that's hard to predict (e.g., a
+      sudden crash). Because they're unpredictable, the defense is structural: never
+      over-leverage, size positions so one shock can't ruin you, and expect the
+      unexpected.
+
+  - id: crash-vs-correction
+    category: macro
+    triggers: ["market crash", "correction", "crash vs correction", "what is a correction"]
+    match_type: contains
+    priority: 56
+    response: >-
+      A correction is typically a decline of about 10% from highs; a crash is a
+      sharp, sudden, larger drop. Corrections are normal and frequent; crashes are
+      rarer and driven by panic or shocks. Position sizing and stops are how you
+      survive both.
+
+  # ------------------------------------------------------------------
+  # 27. CRYPTO / DEFI CONCEPTS
+  # ------------------------------------------------------------------
+  - id: what-is-blockchain
+    category: crypto
+    triggers: ["what is blockchain", "blockchain"]
+    match_type: contains
+    priority: 58
+    response: >-
+      A blockchain is a distributed, tamper-resistant ledger where transactions are
+      recorded in linked blocks across many computers. It removes the need for a
+      single central authority. It's the underlying technology for cryptocurrencies
+      and many other applications.
+
+  - id: what-is-defi
+    category: crypto
+    triggers: ["what is defi", "defi", "decentralized finance"]
+    match_type: contains
+    priority: 56
+    response: >-
+      DeFi (Decentralized Finance) recreates financial services - lending,
+      trading, earning yield - using smart contracts instead of intermediaries. It
+      can offer access and transparency but carries smart-contract, liquidity, and
+      volatility risks. General education, not advice.
+
+  - id: staking
+    category: crypto
+    triggers: ["staking", "what is staking", "stake crypto"]
+    match_type: contains
+    priority: 54
+    response: >-
+      Staking locks up crypto to help secure a proof-of-stake network in exchange
+      for rewards. It can generate yield but may involve lock-up periods, price
+      risk while staked, and platform/validator risk. Rewards are not guaranteed.
+
+  - id: liquidity-pool
+    category: crypto
+    triggers: ["liquidity pool", "what is a liquidity pool", "lp", "amm"]
+    match_type: contains
+    priority: 52
+    response: >-
+      A liquidity pool holds paired assets that let an automated market maker (AMM)
+      facilitate trades without an order book; providers earn fees. A key risk is
+      impermanent loss, where price divergence between the paired assets can leave
+      you worse off than simply holding.
+
+  - id: impermanent-loss
+    category: crypto
+    triggers: ["impermanent loss", "what is impermanent loss"]
+    match_type: contains
+    priority: 52
+    response: >-
+      Impermanent loss is the shortfall a liquidity provider can face when the
+      pooled assets' relative prices change versus just holding them. It becomes
+      "permanent" if you withdraw at that point. Fees earned may or may not offset
+      it. It's a core DeFi risk to understand before providing liquidity.
+
+  - id: gas-fees
+    category: crypto
+    triggers: ["gas fees", "what is gas", "network fees crypto"]
+    match_type: contains
+    priority: 52
+    response: >-
+      Gas fees are payments to process transactions on a blockchain, rising when
+      the network is congested. High gas can make small trades uneconomical. Timing
+      transactions during quieter periods or using cheaper networks reduces cost.
+
+  - id: wallet
+    category: crypto
+    triggers: ["crypto wallet", "what is a wallet", "hot wallet", "cold wallet"]
+    match_type: contains
+    priority: 52
+    response: >-
+      A crypto wallet stores the keys that control your assets. Hot wallets are
+      online and convenient but more exposed; cold wallets are offline and safer for
+      long-term holdings. "Not your keys, not your coins" highlights the risk of
+      leaving funds on exchanges.
+
+  - id: tokenomics
+    category: crypto
+    triggers: ["tokenomics", "what is tokenomics", "token supply"]
+    match_type: contains
+    priority: 52
+    response: >-
+      Tokenomics is the economic design of a token: supply, issuance/inflation,
+      distribution, utility, and incentives. Heavy future unlocks or high inflation
+      can create selling pressure; scarcity and real utility can support value. It's
+      key fundamental context for crypto.
+
+  - id: whale
+    category: crypto
+    triggers: ["whale", "crypto whale", "whales"]
+    match_type: contains
+    priority: 50
+    response: >-
+      A whale is a holder large enough to move a market with their trades. Whale
+      activity can create sharp moves, fake breakouts, and liquidity sweeps.
+      On-chain tools track large wallets, but interpreting them is uncertain -
+      treat it as context, not a signal.
+
+  # ------------------------------------------------------------------
+  # 28. MARKET SESSIONS & TYPES
+  # ------------------------------------------------------------------
+  - id: market-sessions
+    category: general
+    triggers: ["market sessions", "trading sessions", "london session", "new york session", "asian session"]
+    match_type: contains
+    priority: 54
+    response: >-
+      Forex and global markets trade in sessions (Asian, London, New York), with
+      volatility and liquidity peaking around session opens and overlaps. Knowing
+      active sessions helps set expectations for movement. Crypto trades 24/7 but
+      still shows session-linked activity.
+
+  - id: premarket-afterhours
+    category: general
+    triggers: ["pre market", "premarket", "after hours", "extended hours"]
+    match_type: contains
+    priority: 50
+    response: >-
+      Pre-market and after-hours are stock trading periods outside regular hours,
+      with thinner liquidity and wider spreads. Prices can move sharply on news but
+      may not reflect where the regular session opens. Extra caution is warranted in
+      these low-liquidity windows.
+
+  - id: overnight-risk
+    category: general
+    triggers: ["overnight risk", "holding overnight", "weekend risk", "gap risk"]
+    match_type: contains
+    priority: 52
+    response: >-
+      Overnight and weekend risk is the danger that news moves price while the
+      market is closed, causing a gap past your stop. Day traders avoid it by
+      closing positions; swing traders manage it with smaller size and awareness of
+      scheduled events.
+
+  # ------------------------------------------------------------------
+  # 29. STRATEGY DETAIL & SETUPS
+  # ------------------------------------------------------------------
+  - id: pullback-entry
+    category: strategy
+    triggers: ["pullback entry", "buy the dip", "dip buying"]
+    match_type: contains
+    priority: 60
+    response: >-
+      A pullback entry aims to join an uptrend on a dip to support (or a moving
+      average) rather than chasing highs. It offers better risk/reward but the risk
+      is the "dip" turning into a reversal. Confirmation - a bounce, a bullish
+      candle, holding a level - improves the odds.
+
+  - id: breakout-retest-entry
+    category: strategy
+    triggers: ["breakout retest entry", "enter on retest", "retest entry"]
+    match_type: contains
+    priority: 58
+    response: >-
+      A breakout-retest entry waits for price to break a level, then return and
+      hold it as new support/resistance before entering. It filters many fakeouts
+      and offers a clear stop just beyond the level, trading a bit of missed move
+      for higher confidence.
+
+  - id: trend-continuation
+    category: strategy
+    triggers: ["trend continuation", "continuation setup", "trend continuation pattern"]
+    match_type: contains
+    priority: 56
+    response: >-
+      A continuation setup looks to rejoin an existing trend after a pause
+      (consolidation, flag, or pullback). Trading with the established trend
+      generally has better odds than betting on reversals. The pause provides a
+      defined level for entry and stop.
+
+  - id: reversal-setup
+    category: strategy
+    triggers: ["reversal setup", "trend reversal", "catching a reversal"]
+    match_type: contains
+    priority: 56
+    response: >-
+      A reversal setup bets a trend is ending - riskier because you're trading
+      against momentum. It needs strong evidence: a break of structure, divergence,
+      volume shift, and a reclaimed level. Because reversals fail often, tight risk
+      and confirmation are essential.
+
+  - id: range-trading
+    category: strategy
+    triggers: ["range trading", "trade the range", "range strategy"]
+    match_type: contains
+    priority: 58
+    response: >-
+      Range trading buys near support and sells near resistance while price moves
+      sideways, with stops just outside the range. It works until the range breaks -
+      then a breakout can cause a quick loss, so watching for the eventual break is
+      part of the plan.
+
+  - id: news-trading
+    category: strategy
+    triggers: ["news trading", "trading the news", "event trading"]
+    match_type: contains
+    priority: 54
+    response: >-
+      News trading tries to profit from volatility around scheduled events (CPI,
+      rates, earnings). Moves are fast and spreads widen, so slippage and whipsaws
+      are common. Many traders instead reduce size or stand aside around major news
+      to avoid unpredictable risk.
+
+  - id: turtle-strategy
+    category: strategy
+    triggers: ["turtle trading", "turtle strategy", "donchian breakout system"]
+    match_type: contains
+    priority: 48
+    response: >-
+      The Turtle system was a famous trend-following method using Donchian channel
+      breakouts, strict position sizing (volatility-based), and rules for adding and
+      exiting. Its lesson endures: a defined edge plus disciplined risk management
+      can work, but only if followed consistently.
+
+  # ------------------------------------------------------------------
+  # 30. RISK & ANALYSIS INTERPRETATION (more)
+  # ------------------------------------------------------------------
+  - id: where-to-place-stop
+    category: interpretation
+    triggers: ["where to place stop loss", "how to set stop loss", "stop loss placement"]
+    match_type: contains
+    priority: 66
+    response: >-
+      Place a stop where your idea is invalidated, not at an arbitrary dollar
+      amount - e.g., just beyond the support/resistance or swing point you're
+      trading. Then size the position so hitting that stop costs only your intended
+      risk (say 1%). Volatility tools like ATR help avoid stops that are too tight.
+
+  - id: how-to-set-target
+    category: interpretation
+    triggers: ["where to set target", "how to set take profit", "profit target placement"]
+    match_type: contains
+    priority: 62
+    response: >-
+      Common target methods: the next significant support/resistance, a risk/reward
+      multiple of your stop (e.g., 2R or 3R), a measured-move projection, or scaling
+      out at several levels. Set it so the reward justifies the risk before you
+      enter, and be realistic about reaching it.
+
+  - id: good-risk-reward
+    category: interpretation
+    triggers: ["good risk reward ratio", "what risk reward is good", "minimum risk reward"]
+    match_type: contains
+    priority: 62
+    response: >-
+      Many traders look for at least 2:1 or 3:1 reward-to-risk so they can profit
+      even with a sub-50% win rate. But the "right" ratio depends on your win rate:
+      a high-win-rate scalping method can work at lower R:R. What matters is
+      positive expectancy across many trades.
+
+  - id: how-many-trades
+    category: interpretation
+    triggers: ["how many trades", "how many positions", "too many trades"]
+    match_type: contains
+    priority: 56
+    response: >-
+      Quality beats quantity. Taking only trades that fit your rules - and limiting
+      how many open at once - keeps total risk and attention manageable. Watch total
+      portfolio risk, not just per-trade risk, especially with correlated positions.
+
+  - id: adding-to-position
+    category: interpretation
+    triggers: ["adding to position", "pyramiding", "scaling in", "averaging up"]
+    match_type: contains
+    priority: 54
+    response: >-
+      Scaling into a winner (pyramiding) can grow exposure as a trend confirms, but
+      each add should keep total risk controlled and move your stop up. Adding to a
+      loser ("averaging down") is different and risky - it increases exposure to a
+      thesis that isn't working yet.
+
+  - id: averaging-down
+    category: interpretation
+    triggers: ["averaging down", "average down", "buy more as it drops"]
+    match_type: contains
+    priority: 56
+    response: >-
+      Averaging down means buying more as price falls to lower your average cost.
+      It can work with conviction in a long-term investment, but in trading it often
+      means adding to a losing position without a defined invalidation - a common way
+      accounts blow up. It requires strict pre-planned limits.
+
+  - id: scaling-out
+    category: interpretation
+    triggers: ["scaling out", "taking partial profit", "partial exit"]
+    match_type: contains
+    priority: 54
+    response: >-
+      Scaling out means closing part of a position at targets while letting the rest
+      run. It locks in some profit, reduces risk, and eases the emotional pressure of
+      exiting all at once. The trade-off is smaller gains if the move continues fully.
+
+  - id: is-this-a-good-setup
+    category: interpretation
+    triggers: ["is this a good setup", "rate my setup", "analyze my trade", "explain this setup"]
+    match_type: contains
+    priority: 72
+    response: >-
+      I can walk through it with you. A quality setup usually has: a clear trend or
+      range context, a meaningful level, a trigger (candle/breakout/retest), volume
+      or confluence support, and a stop/target where risk/reward makes sense. Type
+      "analyze" to go step by step - I'll describe characteristics, not tell you to
+      buy or sell.
+
+  - id: why-did-i-get-stopped
+    category: interpretation
+    triggers: ["why did i get stopped out", "stopped out then reversed", "stop hunted"]
+    match_type: contains
+    priority: 56
+    response: >-
+      Getting stopped just before a reversal often means the stop was too tight (in
+      the noise), placed at an obvious level that got swept, or the entry was too
+      early. Placing stops beyond structure and sizing accordingly usually beats
+      tight stops at obvious spots. It's normal and part of the process.
+
+  - id: fakeout-protection
+    category: interpretation
+    triggers: ["avoid fakeouts", "how to avoid false breakouts", "not get faked out"]
+    match_type: contains
+    priority: 58
+    response: >-
+      To reduce fakeouts: wait for a candle to close beyond the level (not just a
+      wick), require a volume increase, favor breaks aligned with the higher-
+      timeframe trend, and consider entering on a successful retest. These filters
+      cost some early entries but avoid many traps.
+
+  # ------------------------------------------------------------------
+  # 31. MORE PATTERNS & PRICE ACTION
+  # ------------------------------------------------------------------
+  - id: price-action
+    category: patterns
+    triggers: ["price action", "what is price action", "price action trading"]
+    match_type: contains
+    priority: 62
+    response: >-
+      Price action trading reads raw price - candles, structure, levels - with few
+      or no indicators, focusing on what price is doing rather than lagging
+      calculations. It's flexible but subjective, so clear rules and confirmation
+      still matter.
+
+  - id: inside-bar
+    category: patterns
+    triggers: ["inside bar", "inside candle"]
+    match_type: contains
+    priority: 52
+    response: >-
+      An inside bar is a candle contained within the prior candle's range, showing
+      consolidation and lower volatility. A break out of the mother bar's range is
+      often traded as a continuation or breakout signal, best with trend context.
+
+  - id: outside-bar
+    category: patterns
+    triggers: ["outside bar", "engulfing bar", "outside candle"]
+    match_type: contains
+    priority: 50
+    response: >-
+      An outside bar engulfs the prior candle's entire range, showing a burst of
+      volatility and a potential shift in control. Its meaning depends on location -
+      at a key level after a trend it can hint at a reversal.
+
+  - id: three-drives
+    category: patterns
+    triggers: ["three drives", "three drive pattern"]
+    match_type: contains
+    priority: 44
+    response: >-
+      The three-drives pattern is three successive pushes to new extremes, often
+      with divergence, hinting at exhaustion and a possible reversal. Like all
+      patterns it needs confirmation and works better at significant levels.
+
+  - id: rounding-bottom
+    category: patterns
+    triggers: ["rounding bottom", "rounding top", "saucer"]
+    match_type: contains
+    priority: 44
+    response: >-
+      A rounding bottom (saucer) is a slow, curved base suggesting a gradual shift
+      from selling to buying; a rounding top is the reverse. They signal slow trend
+      change and are confirmed by a breakout from the pattern.
+
+  - id: measured-move
+    category: patterns
+    triggers: ["measured move", "measured move target"]
+    match_type: contains
+    priority: 48
+    response: >-
+      A measured move projects the size of a prior swing onto the next leg to
+      estimate a target (e.g., the pole of a flag projected from the breakout). It's
+      a planning tool for targets, not a guarantee, and works best with other
+      confluence.
+
+  # ------------------------------------------------------------------
+  # 32. TOOL COMMANDS & CALCULATOR HELP
+  # ------------------------------------------------------------------
+  - id: analyze-command
+    category: meta
+    triggers: ["analyze", "analysis mode", "analyze setup", "start analysis"]
+    match_type: contains
+    priority: 90
+    response: >-
+      Analysis mode helps you interpret a setup step by step. I'll ask for the
+      asset, timeframe, entry, stop, take-profit, RSI, price vs the 200 EMA, volume
+      trend, and nearby support/resistance, then describe the setup's
+      characteristics and what would confirm it. I won't tell you to buy or sell.
+      Reply "cancel" anytime to exit.
+
+  - id: risk-command
+    category: meta
+    triggers: ["risk calculator", "calculate risk", "position size calculator", "risk calc"]
+    match_type: contains
+    priority: 90
+    response: >-
+      The risk calculator sizes your trade. Send me: account size, risk % per
+      trade, entry price, and stop-loss price. I'll compute your dollar risk,
+      per-unit risk, and position size using position size = (account x risk%) /
+      |entry - stop|, and show each step.
+
+  - id: cancel-command
+    category: meta
+    triggers: ["cancel", "stop", "exit", "quit", "reset"]
+    match_type: exact
+    priority: 88
+    response: >-
+      Okay, I've cancelled the current flow. Ask a new question, type "menu" for
+      topics, "analyze" for setup analysis, or "risk" for the position-size
+      calculator.
+
+  - id: language-support
+    category: meta
+    triggers: ["do you speak", "other languages", "language support", "hablas espanol", "parlez vous"]
+    match_type: contains
+    priority: 60
+    response: >-
+      You can write in your own language - I translate your question to English,
+      look up the answer, and translate the reply back. The underlying knowledge is
+      in English, so occasional wording differences are possible. Ask away in any
+      language.
+
+  # Note: the bare command words "mentor", "coach", "review", "support", and
+  # "resume" are intercepted by the mentor-mode handler BEFORE FAQ matching.
+  # The entries below explain the feature when a learner asks ABOUT it.
+  - id: mentor-explainer
+    category: meta
+    triggers: ["what is mentor mode", "talk to a mentor", "human mentor", "speak to a human", "human help", "get a mentor"]
+    match_type: contains
+    priority: 86
+    response: >-
+      If you'd like a human to review your question or trading idea, type
+      "mentor" (or "coach" / "review"). That adds you to the mentor queue,
+      pauses automatic replies, and a human mentor follows up (typically within
+      24 hours). If AI-mentor coaching is enabled, you'll also get interactive
+      guidance while you wait. Type "resume" to return to the automatic assistant.
+
+  - id: resume-explainer
+    category: meta
+    triggers: ["what does resume do", "how to resume", "go back to bot", "return to bot", "exit mentor"]
+    match_type: contains
+    priority: 84
+    response: >-
+      While you're in mentor mode, automatic FAQ answers are paused. Type
+      "resume" at any time to switch back to the automatic assistant and continue
+      asking educational questions right away.
+
+  - id: coach-review-explainer
+    category: meta
+    triggers: ["can someone review my setup", "review my trade", "personal guidance", "one on one", "coaching"]
+    match_type: contains
+    priority: 82
+    response: >-
+      Yes - type "review" (or "mentor" / "coach") and your request joins the
+      mentor queue for a human to look at. Automatic replies pause until a mentor
+      responds or you type "resume". Guidance is educational and analytical, not
+      personalized financial advice or buy/sell calls.
+
+  # ------------------------------------------------------------------
+  # 33. ADDITIONAL COMMON QUESTIONS
+  # ------------------------------------------------------------------
+  - id: best-indicator
+    category: general
+    triggers: ["best indicator", "which indicator is best", "most accurate indicator"]
+    match_type: contains
+    priority: 60
+    response: >-
+      There's no single "best" indicator - each measures one thing (momentum,
+      trend, volatility, volume). Piling on many that say the same thing adds false
+      confidence. Most traders use a small, complementary set plus price and volume,
+      and rely on confirmation over any one signal.
+
+  - id: leading-vs-lagging
+    category: general
+    triggers: ["leading vs lagging", "leading indicator", "lagging indicator"]
+    match_type: contains
+    priority: 56
+    response: >-
+      Lagging indicators (like moving averages) confirm trends after they start;
+      leading indicators (like oscillators) try to anticipate turns but give more
+      false signals. Many traders combine a lagging trend filter with a leading
+      timing tool, always with confirmation.
+
+  - id: indicator-lag
+    category: general
+    triggers: ["indicator lag", "why indicators lag", "indicators are late"]
+    match_type: contains
+    priority: 52
+    response: >-
+      Most indicators are calculated from past prices, so they react after price
+      moves - that's lag. It's why signals confirm rather than predict, and why
+      combining them with price structure and confirmation works better than
+      trusting a single lagging line.
+
+  - id: overfitting
+    category: general
+    triggers: ["overfitting", "curve fitting", "over optimized strategy"]
+    match_type: contains
+    priority: 52
+    response: >-
+      Overfitting (curve fitting) is tuning a strategy so tightly to past data that
+      it captures noise, not a real edge - then it fails live. Signs include too
+      many parameters and unrealistically perfect backtests. Simpler rules tested
+      out-of-sample generalize better.
+
+  - id: what-is-spread-betting
+    category: general
+    triggers: ["spread betting", "what is spread betting"]
+    match_type: contains
+    priority: 46
+    response: >-
+      Spread betting is a leveraged way to speculate on price moves without owning
+      the asset, available in some regions. Like all leverage, it magnifies gains
+      and losses, and it has its own costs and tax/regulatory rules that vary by
+      country. General education, not advice.
+
+  - id: cfd
+    category: general
+    triggers: ["cfd", "contract for difference", "what is a cfd"]
+    match_type: contains
+    priority: 48
+    response: >-
+      A CFD (Contract for Difference) is a leveraged derivative that pays the price
+      difference between open and close without owning the asset. It enables long
+      and short positions but carries leverage risk and holding costs, and is
+      restricted in some regions.
+
+  - id: short-squeeze
+    category: general
+    triggers: ["short squeeze", "what is a short squeeze"]
+    match_type: contains
+    priority: 58
+    response: >-
+      A short squeeze is a sharp rally that forces short sellers to buy back to cut
+      losses, which pushes price higher and triggers more buying. It's fueled by
+      crowded shorts and can be violent and short-lived. Chasing one is risky
+      because it can reverse fast.
+
+  - id: bull-trap
+    category: general
+    triggers: ["bull trap", "bear trap"]
+    match_type: contains
+    priority: 56
+    response: >-
+      A bull trap is a false upside breakout that reverses, trapping buyers; a bear
+      trap is the downside version, trapping sellers. Both are essentially fakeouts
+      at key levels. Waiting for a confirmed close and retest helps you avoid being
+      the trapped trader.
+
+  - id: dead-cat-bounce
+    category: general
+    triggers: ["dead cat bounce", "relief rally"]
+    match_type: contains
+    priority: 52
+    response: >-
+      A dead-cat bounce is a temporary recovery within a larger downtrend that then
+      resumes falling. It tempts buyers into thinking the bottom is in. Distinguishing
+      it from a real reversal needs confirmation like a break of structure and
+      sustained volume.
+
+  - id: accumulation-distribution
+    category: general
+    triggers: ["accumulation", "distribution", "accumulation distribution", "wyckoff"]
+    match_type: contains
+    priority: 52
+    response: >-
+      Accumulation is when informed buyers quietly build positions (often in a range
+      after a decline); distribution is quiet selling near tops. The Wyckoff approach
+      studies these phases through price and volume. They're frameworks for reading
+      intent, confirmed by breakouts.
+
+  - id: mark-to-market
+    category: general
+    triggers: ["mark to market", "unrealized pnl", "unrealized profit"]
+    match_type: contains
+    priority: 48
+    response: >-
+      Mark-to-market values open positions at current prices, showing unrealized
+      profit or loss. Unrealized gains aren't locked in until you close - they can
+      vanish. Distinguishing realized from unrealized P&L keeps expectations
+      grounded.
+
+  - id: realized-pnl
+    category: general
+    triggers: ["realized pnl", "realized profit", "realized loss"]
+    match_type: contains
+    priority: 46
+    response: >-
+      Realized P&L is the profit or loss locked in once a position is closed, unlike
+      unrealized P&L which fluctuates while open. Only realized results affect your
+      actual balance, which is why exit discipline matters.
+
+  - id: what-is-a-pip
+    category: general
+    triggers: ["what is a pip", "pip", "pips"]
+    match_type: contains
+    priority: 50
+    response: >-
+      A pip is the smallest standard price increment in forex, usually the fourth
+      decimal place (0.0001) for most pairs. Traders measure moves, spreads, and
+      risk in pips. Pip value depends on position size and the pair.
+
+  - id: what-is-a-tick
+    category: general
+    triggers: ["what is a tick", "tick size", "ticks"]
+    match_type: contains
+    priority: 46
+    response: >-
+      A tick is the minimum price movement of an instrument. Tick size and tick
+      value vary by market and determine how much each minimum move is worth,
+      which matters for sizing and stop placement in futures and other markets.
+
+  - id: lot-size
+    category: general
+    triggers: ["lot size", "what is a lot", "standard lot", "mini lot"]
+    match_type: contains
+    priority: 48
+    response: >-
+      A lot is a standardized trade quantity, common in forex (a standard lot is
+      100,000 units; mini 10,000; micro 1,000). Lot size directly affects risk per
+      pip, so it's a key input when sizing positions to your risk limit.
+
+  - id: leverage-ratio-choice
+    category: interpretation
+    triggers: ["how much leverage should i use", "what leverage is safe", "safe leverage"]
+    match_type: contains
+    priority: 58
+    response: >-
+      Lower is safer. Many experienced traders use little or no leverage, and
+      beginners are often better off avoiding it until risk management is solid.
+      High leverage shrinks the adverse move needed to liquidate you. Size from your
+      stop and risk %, not from the maximum leverage offered.
+
+  - id: how-much-to-start
+    category: interpretation
+    triggers: ["how much money to start trading", "minimum to start", "starting capital"]
+    match_type: contains
+    priority: 56
+    response: >-
+      Start with an amount you can fully afford to lose while you learn - small
+      enough that mistakes are cheap but real enough to matter emotionally. Skill
+      and consistent process matter far more early on than account size. General
+      education, not personal financial advice.
+
+  - id: is-trading-gambling
+    category: interpretation
+    triggers: ["is trading gambling", "trading vs gambling"]
+    match_type: contains
+    priority: 56
+    response: >-
+      Trading without an edge, rules, or risk control resembles gambling. What
+      separates them is a repeatable positive-expectancy process, disciplined risk,
+      and managing probabilities over many trades - not chasing single big wins.
+      Structure is the difference.
+
+  - id: can-i-get-rich-quick
+    category: interpretation
+    triggers: ["get rich quick", "make money fast trading", "double my money"]
+    match_type: contains
+    priority: 60
+    response: >-
+      Get-rich-quick expectations usually lead to over-leverage and blown accounts.
+      Sustainable trading is slow, probabilistic, and focused on not losing big.
+      Anyone promising guaranteed or fast riches is a major red flag. Focus on
+      process and risk, not shortcuts.
+
+  - id: why-do-traders-lose
+    category: interpretation
+    triggers: ["why do most traders lose", "why traders fail", "most traders lose money"]
+    match_type: contains
+    priority: 58
+    response: >-
+      Common reasons traders lose: poor risk management and over-leverage, no
+      defined edge, emotional decisions (FOMO, revenge trading), overtrading, and
+      not following a plan. Notably, most of these are controllable - which is why
+      discipline and risk control are emphasized so heavily.
+
+  # ------------------------------------------------------------------
+  # 34. FINAL BATCH - CONCEPTS, RATIOS, MISC
+  # ------------------------------------------------------------------
+  - id: sharpe-ratio
+    category: metrics
+    triggers: ["sharpe ratio", "what is sharpe ratio"]
+    match_type: contains
+    priority: 50
+    response: >-
+      The Sharpe ratio measures return per unit of risk (volatility). A higher
+      Sharpe means better risk-adjusted returns. It helps compare strategies
+      fairly - a high return with wild swings can be worse than a steadier, lower
+      return.
+
+  - id: profit-factor
+    category: metrics
+    triggers: ["profit factor", "what is profit factor"]
+    match_type: contains
+    priority: 48
+    response: >-
+      Profit factor is gross profit divided by gross loss. Above 1 means the system
+      makes money; higher is better, though very high values on few trades can be
+      unreliable. It's a quick health check for a strategy's results.
+
+  - id: max-consecutive-losses
+    category: metrics
+    triggers: ["losing streak", "consecutive losses", "how many losses in a row"]
+    match_type: contains
+    priority: 52
+    response: >-
+      Losing streaks are normal even for good systems. Small per-trade risk (e.g.,
+      1%) ensures a long streak only mildly dents the account, keeping you able to
+      keep trading. Planning for streaks psychologically and financially prevents
+      panic changes to a working system.
+
+  - id: expectancy-formula
+    category: metrics
+    triggers: ["expectancy formula", "calculate expectancy", "average trade result"]
+    match_type: contains
+    priority: 48
+    response: >-
+      Expectancy ~ (win% x average win) - (loss% x average loss). A positive result
+      means the system is profitable over many trades. It shows why win rate alone
+      is misleading - the size of wins versus losses matters just as much.
+
+  - id: what-is-alpha
+    category: metrics
+    triggers: ["what is alpha", "alpha", "generating alpha"]
+    match_type: contains
+    priority: 46
+    response: >-
+      Alpha is return above a benchmark after accounting for risk - the value added
+      by skill rather than just market exposure. Beating the market consistently is
+      hard; much of what looks like alpha is really added risk (beta) in disguise.
+
+  - id: what-is-beta
+    category: metrics
+    triggers: ["what is beta", "beta", "market beta"]
+    match_type: contains
+    priority: 46
+    response: >-
+      Beta measures how much an asset moves relative to the market. Beta above 1
+      means it swings more than the market; below 1 means less. High-beta positions
+      amplify both gains and losses when the market moves.
+
+  - id: dollar-volume
+    category: volume
+    triggers: ["dollar volume", "turnover"]
+    match_type: contains
+    priority: 44
+    response: >-
+      Dollar volume (turnover) is price times volume - the money changing hands. It
+      reflects real liquidity better than share count alone, since a high share
+      count in a cheap asset can still be small money. It helps compare liquidity
+      across assets.
+
+  - id: climax-volume
+    category: volume
+    triggers: ["climax volume", "volume spike", "volume climax"]
+    match_type: contains
+    priority: 50
+    response: >-
+      A volume spike or climax is an unusually large burst of volume, often at the
+      end of a strong move, hinting at exhaustion or a turning point. It can also
+      confirm a breakout. Context - where it occurs - decides which meaning applies.
+
+  - id: gap-fill
+    category: general
+    triggers: ["gap fill", "will the gap fill", "filling the gap"]
+    match_type: contains
+    priority: 46
+    response: >-
+      "Filling the gap" is when price later trades back across a prior gap. Many
+      gaps fill eventually, but not all, and timing is uncertain. It's a tendency to
+      note, not a reliable trade trigger by itself.
+
+  - id: seasonality
+    category: general
+    triggers: ["seasonality", "seasonal patterns", "sell in may"]
+    match_type: contains
+    priority: 44
+    response: >-
+      Seasonality refers to recurring calendar tendencies (like "sell in May" or
+      year-end effects). They're statistical tendencies over history, not
+      guarantees, and can fail in any given year. Treat them as minor context, not a
+      standalone edge.
+
+  - id: mean-reversion-vs-trend
+    category: strategy
+    triggers: ["mean reversion vs trend following", "trend vs mean reversion"]
+    match_type: contains
+    priority: 54
+    response: >-
+      Trend following profits when moves persist; mean reversion profits when price
+      snaps back to average. They suit opposite conditions - trends versus ranges -
+      which is why identifying the market regime first (e.g., with ADX) helps you
+      pick the right approach.
+
+  - id: correlation-btc-alts
+    category: crypto
+    triggers: ["do altcoins follow bitcoin", "btc correlation alts", "alts follow btc"]
+    match_type: contains
+    priority: 50
+    response: >-
+      Altcoins often follow Bitcoin's direction, especially during sharp moves, and
+      tend to amplify it - rising more in rallies and falling more in drops. This
+      correlation means "diversifying" across many alts may still be one big
+      correlated bet on crypto.
+
+  - id: dxy
+    category: macro
+    triggers: ["dxy", "dollar index", "us dollar index"]
+    match_type: contains
+    priority: 50
+    response: >-
+      The DXY (US Dollar Index) tracks the dollar against a basket of currencies. A
+      strong dollar often pressures commodities, some stocks, and risk assets; a
+      weak dollar can support them. It's a common macro backdrop traders watch.
+
+  - id: bonds-and-stocks
+    category: macro
+    triggers: ["bonds vs stocks", "bond yields stocks", "how do bonds affect stocks"]
+    match_type: contains
+    priority: 48
+    response: >-
+      Rising bond yields make safer income more attractive and raise borrowing
+      costs, which can pressure stocks (especially growth names); falling yields
+      often support them. The stock-bond relationship shifts over time but is a key
+      macro linkage.
+
+  - id: risk-management-summary
+    category: risk-management
+    triggers: ["risk management tips", "risk management rules", "how to manage risk"]
+    match_type: contains
+    priority: 70
+    response: >-
+      Core risk rules: risk a small fixed % per trade (e.g., 1%), always use a stop
+      at your invalidation, size from stop distance (not margin), aim for sensible
+      risk/reward, limit total and correlated exposure, and avoid over-leverage.
+      Protecting capital comes before chasing profit. Type "risk" to size a trade.
+
+  - id: what-is-an-asset
+    category: general
+    triggers: ["what is an asset", "asset class", "asset classes"]
+    match_type: contains
+    priority: 44
+    response: >-
+      An asset is something with economic value you can trade or hold - stocks,
+      bonds, currencies, commodities, crypto, real estate. Asset classes behave
+      differently and respond to different drivers, which is the basis for
+      diversification.
+
+  - id: what-is-a-pnl
+    category: general
+    triggers: ["what is pnl", "pnl", "profit and loss"]
+    match_type: contains
+    priority: 46
+    response: >-
+      P&L (Profit and Loss) is how much a position or account has gained or lost.
+      Unrealized P&L moves while a trade is open; realized P&L is locked in on close.
+      Tracking both, along with fees, keeps performance honest.
+
+  - id: what-is-roi
+    category: general
+    triggers: ["what is roi", "roi", "return on investment"]
+    match_type: contains
+    priority: 46
+    response: >-
+      ROI (Return on Investment) is profit relative to the amount invested, usually
+      a percentage. It lets you compare outcomes of different sizes, but it ignores
+      risk and time - a high ROI taken with huge risk isn't necessarily good.
+
+  - id: opportunity-cost
+    category: general
+    triggers: ["opportunity cost", "what is opportunity cost"]
+    match_type: contains
+    priority: 42
+    response: >-
+      Opportunity cost is the value of the best alternative you gave up. Capital
+      tied in a stagnant trade can't work elsewhere. Considering it helps you avoid
+      holding dead positions just to avoid admitting a mistake.
+
+  - id: what-is-margin-of-safety
+    category: general
+    triggers: ["margin of safety", "what is margin of safety"]
+    match_type: contains
+    priority: 42
+    response: >-
+      Margin of safety is buying with enough cushion below estimated value that
+      errors or bad luck don't ruin the outcome. It's a value-investing idea that
+      applies broadly: build in room for being wrong rather than assuming your
+      analysis is perfect.
+
+  - id: dca-out
+    category: strategy
+    triggers: ["dca out", "scaling out over time", "selling in tranches"]
+    match_type: contains
+    priority: 44
+    response: >-
+      Just as you can dollar-cost average in, you can scale out over time - selling
+      portions at intervals to reduce timing risk on exits. It trades maximum
+      possible profit for smoother, less stressful selling.
+
+  - id: what-is-a-watchlist
+    category: general
+    triggers: ["watchlist", "what is a watchlist", "how to build a watchlist"]
+    match_type: contains
+    priority: 42
+    response: >-
+      A watchlist is a curated set of assets you monitor for setups, so you focus
+      attention instead of scanning everything. Good watchlists are short and match
+      your strategy, updated as conditions change. It supports patience and
+      selectivity.
+
+  - id: trading-checklist
+    category: general
+    triggers: ["trading checklist", "pre trade checklist", "entry checklist"]
+    match_type: contains
+    priority: 48
+    response: >-
+      A pre-trade checklist forces you to confirm your criteria before entering:
+      trend/regime, level, trigger, confirmation, stop, target, risk/reward, and
+      position size. It reduces impulsive trades and enforces consistency - one of
+      the simplest ways to improve results.
+
+  - id: revenge-vs-plan
+    category: psychology
+    triggers: ["how to stop revenge trading", "stop overtrading", "control impulses"]
+    match_type: contains
+    priority: 56
+    response: >-
+      Practical fixes: set a daily loss limit and stop when hit, step away after a
+      loss, use a checklist, keep position sizes small enough to think clearly, and
+      journal the emotion behind each trade. Structure beats willpower for breaking
+      revenge and overtrading habits.
+
+  - id: what-is-leverage-example
+    category: leverage
+    triggers: ["leverage example", "how leverage works example", "10x example"]
+    match_type: contains
+    priority: 60
+    response: >-
+      Example: with $1,000 at 10x you control $10,000 of exposure. A +5% move earns
+      about $500 (50% of your capital); a -5% move loses about $500; roughly -10%
+      can wipe the position (liquidation). Same percentage move, ten times the
+      impact - that's why leverage cuts both ways.
+
+  - id: stop-loss-vs-mental-stop
+    category: risk-management
+    triggers: ["mental stop", "hard stop vs mental stop", "should i use mental stops"]
+    match_type: contains
+    priority: 52
+    response: >-
+      A hard stop is an order resting in the market; a mental stop is a level you
+      intend to act on manually. Mental stops rely on discipline and are easily
+      rationalized away in the moment, so most traders - especially beginners -
+      benefit from hard stops.
+
+  - id: position-size-crypto
+    category: risk-management
+    triggers: ["position size crypto", "how much crypto to buy", "crypto position sizing"]
+    match_type: contains
+    priority: 56
+    response: >-
+      Crypto position sizing uses the same rule as any market: dollar risk =
+      account x risk%; position size = dollar risk / |entry - stop|. Because crypto
+      is volatile, stops are often wider, which means smaller positions to keep risk
+      constant. Type "risk" to calculate yours.
+
+  # ------------------------------------------------------------------
+  # 35. EXTRA CONCEPTS
+  # ------------------------------------------------------------------
+  - id: what-is-a-swing-high-low
+    category: chart-structure
+    triggers: ["swing high", "swing low", "what is a swing point"]
+    match_type: contains
+    priority: 54
+    response: >-
+      A swing high is a local peak (a candle with lower highs on both sides); a
+      swing low is a local trough. These points define market structure and are
+      where stops, breakouts, and trendlines are anchored. Tracking them shows
+      whether a trend is intact or breaking.
+
+  - id: what-is-a-wick
+    category: candlesticks
+    triggers: ["what is a wick", "candle wick", "shadow candle", "candle shadow"]
+    match_type: contains
+    priority: 52
+    response: >-
+      A wick (or shadow) is the thin line above or below a candle body, marking the
+      high and low reached during the period. Long wicks show that price was pushed
+      to a level and rejected - a sign of who won the battle at that extreme.
+
+  - id: what-is-slumpflation
+    category: macro
+    triggers: ["stagflation", "what is stagflation"]
+    match_type: contains
+    priority: 46
+    response: >-
+      Stagflation is high inflation combined with weak growth (and often high
+      unemployment) - a tough mix because the usual policy tools work against each
+      other. It tends to pressure many asset classes at once and complicates
+      central-bank decisions.
+
+  - id: what-is-a-catalyst
+    category: general
+    triggers: ["what is a catalyst", "catalyst", "price catalyst"]
+    match_type: contains
+    priority: 46
+    response: >-
+      A catalyst is an event or news item that can spark a significant price move -
+      earnings, a product launch, a regulation, or macro data. Traders map upcoming
+      catalysts to anticipate volatility, though the reaction versus expectations is
+      what actually moves price.
+
+  - id: what-is-a-trend-reversal-signal
+    category: interpretation
+    triggers: ["signs of trend reversal", "how to spot a reversal", "reversal signs"]
+    match_type: contains
+    priority: 56
+    response: >-
+      Common reversal clues (needing confirmation): a break of market structure
+      (e.g., uptrend making a lower low), divergence on momentum, a decisive move
+      through a key level, a shift in volume, and reversal candles at extremes. One
+      clue is weak; several together (confluence) is stronger.
+
+  - id: what-is-a-continuation-signal
+    category: interpretation
+    triggers: ["signs of trend continuation", "will the trend continue", "continuation signs"]
+    match_type: contains
+    priority: 54
+    response: >-
+      Continuation clues include healthy pullbacks that hold support, consolidation
+      patterns (flags, triangles) breaking with the trend, momentum staying on the
+      trend side, and volume expanding on trend-direction moves. Trading with the
+      established trend generally carries better odds than fading it.
+
+  - id: what-does-flat-market-mean
+    category: interpretation
+    triggers: ["flat market", "choppy market", "no trend", "market going sideways"]
+    match_type: contains
+    priority: 52
+    response: >-
+      A flat or choppy market lacks a clear trend, producing false signals for
+      trend and breakout strategies. Options: reduce size, switch to range tactics
+      (buy support, sell resistance), or stand aside. Recognizing "no trade" as a
+      valid choice protects capital in chop.
+
+  - id: how-to-improve-as-trader
+    category: interpretation
+    triggers: ["how to get better at trading", "improve my trading", "become a better trader"]
+    match_type: contains
+    priority: 56
+    response: >-
+      The highest-value habits: keep a trading journal and review it, risk small and
+      consistently, master one strategy before adding more, focus on process over
+      individual outcomes, and manage emotions with rules and breaks. Improvement
+      comes from feedback loops, not from finding a "magic" indicator.
+
+  - id: whats-the-holy-grail
+    category: interpretation
+    triggers: ["holy grail", "perfect strategy", "guaranteed strategy", "never lose"]
+    match_type: contains
+    priority: 58
+    response: >-
+      There's no holy grail - no strategy wins every time or removes risk. The
+      closest real "edge" is disciplined risk management plus a modest, consistent
+      statistical advantage applied over many trades. Beware anyone selling
+      guaranteed or never-lose systems.
