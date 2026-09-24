@@ -29,10 +29,6 @@ def detect_language(text: str) -> str:
     if not _LANGDETECT_AVAILABLE:
         return "en"
 
-    # Short texts are hard to detect reliably — treat as English
-    if len(text.strip()) < 20:
-        return "en"
-
     # Pure ASCII text is almost certainly English
     if text.isascii():
         return "en"
