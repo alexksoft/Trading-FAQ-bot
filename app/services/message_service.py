@@ -50,8 +50,8 @@ class MessageService:
         mentor.auto_expire_if_needed(session, faq_config)
         session = get_session(msg.sender)  # reload after possible expiry
 
-        if session.mode == "human":
-            # In mentor mode: pass original text, AI handles language itself
+        if session.mode == "ai":
+            # In AI tutor mode: pass original text, AI handles language itself
             original_msg = msg.model_copy(update={"text": msg.original_text})
             return await self._handle_mentor_mode(original_msg, session, faq_config)
 
@@ -107,8 +107,8 @@ class MessageService:
             return reply
 
         # Log the message for the human mentor to review
-        logger.info(f"[MENTOR MODE] Message from {msg.sender} logged for human review: '{msg.text[:80]}'")
-        log_message(msg.sender, msg.text, "mentor_mode", "logged_for_mentor", msg.original_lang)
+        logger.info(f"[AI TUTOR MODE] Message from {msg.sender}: '{msg.text[:80]}'")
+        log_message(msg.sender, msg.text, "ai_tutor_mode", "ai_reply", msg.original_lang)
 
         # Update last_message in session
         session.last_message = msg.text
