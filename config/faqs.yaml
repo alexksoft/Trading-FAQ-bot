@@ -18,7 +18,7 @@ fallback_message: >-
   I didn't find an answer for that. Try a keyword like "RSI", "MACD",
   "stop loss", "position size", "DCA", "leverage", or "candlestick".
   Type "menu" to see topics, "analyze" for setup analysis, "risk" for
-  the position-size calculator, or "mentor" for a human review.
+  the position-size calculator, or "mentor" to connect to the AI mentor.
 
 # Mentor mode: these commands pause rule-based FAQ answering and hand the
 # conversation to a human mentor (and, if enabled, an AI-mentor via
@@ -27,8 +27,8 @@ mentor_commands: ["mentor", "coach", "review", "support"]
 resume_command: "resume"
 
 mentor_confirmation: >-
-  Your request has been added to the mentor queue. A human mentor will reply
-  within 24 hours, and automatic replies are paused. Type "resume" anytime to
+  You are now connected to the AI mentor. Ask your question and I will help
+  you analyze it. Automatic FAQ replies are paused. Type "resume" anytime to
   switch back to the automatic assistant.
 
 resume_confirmation: >-
@@ -65,7 +65,7 @@ entries:
       reversion, momentum, breakout, DCA, swing, scalping. (4) Psychology - FOMO,
       revenge trading, loss aversion. (5) Macro - CPI, interest rates, bull/bear.
       Type a keyword, "analyze" (setup analysis), "risk" (position size), or
-      "mentor" for a human review.
+      "mentor" to connect to the AI mentor.
 
   - id: greeting
     category: meta
@@ -2889,11 +2889,10 @@ entries:
     match_type: contains
     priority: 86
     response: >-
-      If you'd like a human to review your question or trading idea, type
-      "mentor" (or "coach" / "review"). That adds you to the mentor queue,
-      pauses automatic replies, and a human mentor follows up (typically within
-      24 hours). If AI-mentor coaching is enabled, you'll also get interactive
-      guidance while you wait. Type "resume" to return to the automatic assistant.
+      Type "mentor" (or "coach" / "review") to connect to the AI mentor for
+      interactive guidance on your question or trading idea. Automatic FAQ replies
+      pause while you're in mentor mode. Type "resume" to return to the automatic
+      assistant.
 
   - id: resume-explainer
     category: meta
