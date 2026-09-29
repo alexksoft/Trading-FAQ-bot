@@ -53,6 +53,10 @@ class Settings(BaseSettings):
     admin_enabled: bool = Field(default=False, alias="ADMIN_ENABLED")
     admin_token: str = Field(default="", alias="ADMIN_TOKEN")
 
+    # ---- Google Sheets user tracking ----
+    google_creds_path: str = Field(default="", alias="GOOGLE_CREDS_PATH")
+    google_sheet_id: str = Field(default="", alias="GOOGLE_SHEET_ID")
+
     # ---- Server ----
     host: str = Field(default="0.0.0.0", alias="HOST")
     port: int = Field(default=8000, alias="PORT")

@@ -100,13 +100,18 @@ class MetaCloudAdapter(ProviderAdapter):
             if not sender or not text:
                 return None
 
+            # Extract display name from contacts if available
+            contacts = value.get("contacts", [])
+            display_name = contacts[0].get("profile", {}).get("name", "") if contacts else ""
+
             return InboundMessage(
                 sender=sender,
-                text=text,          # will be replaced with English translation if needed
+                text=text,
                 original_text=text,
-                original_lang="en", # will be detected by translation service
+                original_lang="en",
                 provider="meta",
                 raw=payload,
+                display_name=display_name,
             )
 
         except (KeyError, IndexError, TypeError) as e:

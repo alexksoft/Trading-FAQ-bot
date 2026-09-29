@@ -8,6 +8,7 @@ from app.config.config_loader import ConfigLoader
 from app.models.message import InboundMessage
 from app.services import matching, mentor, mentor_llm, translation, risk_calculator, analysis_engine
 from app.services.session_store import get_session, save_session
+from app.services.user_tracker import track_user
 from app.logging_config import log_message
 
 logger = logging.getLogger(__name__)
@@ -43,12 +44,16 @@ class MessageService:
 
         logger.info(f"Message from {msg.sender} [{original_lang}]: '{english_text[:80]}'")
 
-        # --- Step 2: Mentor mode gate ---
+        # --- Step 2: Track user in Google Sheets ---
+        track_user(msg.sender, display_name=msg.display_name, lang=original_lang, provider=msg.provider)
+
+        # --- Step 3: Mentor mode gate ---
         session = get_session(msg.sender)
 
         # Auto-expire mentor mode if TTL has passed
         mentor.auto_expire_if_needed(session, faq_config)
         session = get_session(msg.sender)  # reload after possible expiry
+
 
         if session.mode == "ai":
             # In AI tutor mode: pass original text, AI handles language itself

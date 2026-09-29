@@ -13,6 +13,7 @@ class InboundMessage(BaseModel):
     original_lang: str   # ISO language code, e.g. "en", "es", "uk"
     provider: str        # "meta" | "twilio" | "dialog360"
     raw: dict            # The full raw payload from the provider
+    display_name: str = ""  # WhatsApp profile display name (if available)
 
 
 class MatchResult(BaseModel):
